@@ -1,2 +1,5 @@
-﻿  application.cpp
+﻿  VertexArray.cpp
+C:\Users\sbons\OneDrive\Escriptori\TFG\TFG\TFG\src\VertexArray.cpp(25,1): warning C4312: 'conversión de tipo': conversión de 'unsigned int' a 'const void *' de mayor tamaño
+  application.cpp
+  Generando código...
   TFG.vcxproj -> C:\Users\sbons\OneDrive\Escriptori\TFG\TFG\x64\Debug\TFG.exe

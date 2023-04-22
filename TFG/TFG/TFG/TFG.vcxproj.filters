@@ -57,6 +57,9 @@
     <ClCompile Include="src\tests\TestClearColor.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="src\tests\Test.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\Shaders\Basic.shader" />
@@ -1361,7 +1364,7 @@
     <ClInclude Include="src\vendor\imgui\stb_truetype.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="src\tests\test.h">
+    <ClInclude Include="src\tests\Test.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="src\tests\TestClearColor.h">

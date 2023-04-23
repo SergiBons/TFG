@@ -20,6 +20,7 @@
 #include"imgui/imgui_impl_glfw_gl3.h"
 
 #include"tests/TestClearColor.h"
+#include"tests/TestTexture2D.h"
 
 int main(void)
 {
@@ -52,52 +53,7 @@ int main(void)
     std::cout << glGetString(GL_VERSION) << std::endl;
 
     {
-        float positions[] = {
-                -50.0f, -50.0f, 0.0f, 0.0f,
-                50.0f, -50.0f, 1.0f, 0.0f,
-                50.0f, 50.0f, 1.0f, 1.0f,
-                -50.0f, 50.0f, 0.0f, 1.0f
-        };
-
-
-        unsigned int indices[] = {
-        0,1,2,
-        2,3,0
-        };
-
-        GLCall(glEnable(GL_BLEND));
-        GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-        
-
-        VertexArray va;
-        VertexBuffer vb(positions, 4 * 4 * sizeof(float));
-        
-        VertexBufferLayout layout;
-        layout.Push<float>(2);
-        layout.Push<float>(2);
-        va.AddBuffer(vb, layout);
-
-        IndexBuffer ib(indices, 6);
-
-        glm::mat4 proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
-        glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
-        
-
-        Shader shader("res/Shaders/Basic.shader");
-        shader.Bind();
-        shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
-
- 
-        Texture texture("res/textures/testure.png");
-        texture.Bind();//Si passem argument, l'hem de settejar al uniform just a sota
-        shader.SetUniform1i("u_Texture", 0);//Es a dir, si al bind assginem el slot 1, aqui ficariem un 1.
-
-        va.Unbind();
-        shader.Unbind();
-        vb.Unbind();
-        ib.Unbind();
-  
-
+       
         Renderer renderer;
 
         ImGui::CreateContext();
@@ -120,6 +76,7 @@ int main(void)
         currentTest = testMenu;
 
         testMenu->RegisterTest<test::TestClearColor>("Clear Color");
+        testMenu->RegisterTest<test::TestTexture2D>("Texture 2D");
 
 
         while (!glfwWindowShouldClose(window))

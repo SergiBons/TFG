@@ -5,6 +5,7 @@
 #include<sstream>
 
 
+
 Shader::Shader(const std::string& filepath)
     : m_FilePath(filepath), m_RendererID(0)
 
@@ -134,7 +135,7 @@ void Shader::SetUniformMat4f(const std::string& name, const glm::mat4& matrix)
 
 
 
-unsigned int Shader::GetUniformLocation(const std::string& name)
+unsigned int Shader::GetUniformLocation(const std::string& name) const
 {
     if (m_UniformLocationCache.find(name) != m_UniformLocationCache.end())
         return m_UniformLocationCache[name];

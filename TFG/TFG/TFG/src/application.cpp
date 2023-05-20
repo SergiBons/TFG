@@ -21,6 +21,7 @@
 
 #include"tests/TestClearColor.h"
 #include"tests/TestTexture2D.h"
+#include"tests/TestPlayground.h"
 
 int main(void)
 {
@@ -77,6 +78,7 @@ int main(void)
 
         testMenu->RegisterTest<test::TestClearColor>("Clear Color");
         testMenu->RegisterTest<test::TestTexture2D>("Texture 2D");
+        testMenu->RegisterTest<test::TestPlayground>("Playground");
 
 
         while (!glfwWindowShouldClose(window))
@@ -100,41 +102,7 @@ int main(void)
                 currentTest->OnImGuiRender();
                 ImGui::End();
             }
-
-            /*
-            shader.Bind();
-
-            {
-                glm::mat4 model = glm::translate(glm::mat4(1.0f), translationA);
-                glm::mat4 mvp = proj * view * model;
-                
-                shader.SetUniformMat4f("u_MVP", mvp);
-                renderer.Draw(va, ib, shader);
-            }
-
-            {
-                glm::mat4 model = glm::translate(glm::mat4(1.0f), translationB);
-                glm::mat4 mvp = proj * view * model;
-
-                shader.SetUniformMat4f("u_MVP", mvp);
-                renderer.Draw(va, ib, shader);
-            }
-            GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
-            if (r >= 1.0f)
-                inc = -0.01f;
-            else if (r <= 0.0f)
-                inc = 0.01f;
-            r += inc;
-            
-
-            {
-                ImGui::SliderFloat3("Translation A", &translationA.x, 0.0f, 960.0f);
-                ImGui::SliderFloat3("Translation B", &translationB.x, 0.0f, 960.0f);
-                ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-            }
-
-
-            */
+           
             ImGui::Render();
             ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
 

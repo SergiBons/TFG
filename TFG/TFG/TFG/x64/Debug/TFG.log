@@ -1,13 +1,58 @@
 ﻿  application.cpp
-  TestTexture2D.cpp
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\VertexBuffer.h(8,20): error C2039: "vector": no es un miembro de "std"
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\sstream(20,1): message : vea la declaración de 'std'
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\VertexBuffer.h(8,14): error C2061: error de sintaxis: identificador 'vector'
+  IndexBuffer.cpp
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\VertexBuffer.h(8,20): error C2039: "vector": no es un miembro de "std"
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\predefined C++ types (compiler internal)(342,11): message : vea la declaración de 'std'
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\VertexBuffer.h(8,14): error C2061: error de sintaxis: identificador 'vector'
+  ModelHandler.cpp
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\VertexBuffer.h(8,20): error C2039: "vector": no es un miembro de "std"
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\predefined C++ types (compiler internal)(342,11): message : vea la declaración de 'std'
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\VertexBuffer.h(8,14): error C2061: error de sintaxis: identificador 'vector'
+  Renderer.cpp
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\VertexBuffer.h(8,20): error C2039: "vector": no es un miembro de "std"
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\predefined C++ types (compiler internal)(342,11): message : vea la declaración de 'std'
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\VertexBuffer.h(8,14): error C2061: error de sintaxis: identificador 'vector'
+  Shader.cpp
+  TestClearColor.cpp
+  TestPlayground.cpp
 C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\memory(3433,56): warning C4244: 'argumento': conversión de '_Ty' a 'unsigned int'; posible pérdida de datos
           with
           [
               _Ty=unsigned __int64
           ]
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestPlayground.cpp(56,13): message : Vea la referencia a la creación de una instancia de la función plantilla "std::unique_ptr<VertexBuffer,std::default_delete<VertexBuffer>> std::make_unique<VertexBuffer,std::vector<double,std::allocator<double>>&,unsigned __int64,0>(std::vector<double,std::allocator<double>> &,unsigned __int64 &&)" que se está compilando
+  TestTexture2D.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\memory(3433,35): error C2665: 'VertexBuffer::VertexBuffer':ninguna función sobrecargada pudo convertir todos los tipos de argumento
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\VertexBuffer.h(8,2): message : puede ser 'VertexBuffer::VertexBuffer(std::vector<double,std::allocator<double>>,unsigned int)'
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\memory(3433,35): message : 'VertexBuffer::VertexBuffer(std::vector<double,std::allocator<double>>,unsigned int)': el argumento 1 no puede convertirse de 'float [16]' a 'std::vector<double,std::allocator<double>>'
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\memory(3433,56): message : Ningún constructor ha podido aceptar el tipo de origen o bien la resolución de sobrecarga del constructor era ambigua
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\memory(3433,35): message : al hacer coincidir la lista de argumentos '(float [16], _Ty)'
+          with
+          [
+              _Ty=unsigned __int64
+          ]
 C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestTexture2D.cpp(38,13): message : Vea la referencia a la creación de una instancia de la función plantilla "std::unique_ptr<VertexBuffer,std::default_delete<VertexBuffer>> std::make_unique<VertexBuffer,float(&)[16],unsigned __int64,0>(float (&)[16],unsigned __int64 &&)" que se está compilando
+  Texture.cpp
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\VertexBuffer.h(8,20): error C2039: "vector": no es un miembro de "std"
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\predefined C++ types (compiler internal)(342,11): message : vea la declaración de 'std'
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\VertexBuffer.h(8,14): error C2061: error de sintaxis: identificador 'vector'
+  VertexArray.cpp
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\VertexBuffer.h(8,20): error C2039: "vector": no es un miembro de "std"
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\predefined C++ types (compiler internal)(342,11): message : vea la declaración de 'std'
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\VertexBuffer.h(8,14): error C2061: error de sintaxis: identificador 'vector'
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\VertexArray.cpp(27,1): warning C4312: 'conversión de tipo': conversión de 'unsigned int' a 'const void *' de mayor tamaño
+  VertexBuffer.cpp
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\VertexBuffer.h(8,20): error C2039: "vector": no es un miembro de "std"
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\predefined C++ types (compiler internal)(342,11): message : vea la declaración de 'std'
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\VertexBuffer.h(8,14): error C2061: error de sintaxis: identificador 'vector'
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\VertexBuffer.cpp(4,15): error C2511: 'VertexBuffer::VertexBuffer(std::vector<double,std::allocator<double>>,unsigned int)': la función miembro sobrecargada no se ha encontrado en 'VertexBuffer'
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\VertexBuffer.h(3,7): message : vea la declaración de 'VertexBuffer'
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\VertexBuffer.cpp(6,5): error C2597: referencia no válida a miembro no static 'VertexBuffer::m_RendererID'
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\VertexBuffer.h(6,15): message : vea la declaración de 'VertexBuffer::m_RendererID'
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\VertexBuffer.cpp(6,5): error C2664: 'void (GLsizei,GLuint *)': el argumento 2 no puede convertirse de 'unsigned int VertexBuffer::* ' a 'GLuint *'
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\VertexBuffer.cpp(6,5): message : No existe un contexto en el que sea posible realizar esta conversión
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\VertexBuffer.cpp(7,5): error C2597: referencia no válida a miembro no static 'VertexBuffer::m_RendererID'
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\VertexBuffer.h(6,15): message : vea la declaración de 'VertexBuffer::m_RendererID'
   Generando código...
-glew32s.lib(glew.obj) : warning LNK4099: no se encontró PDB '' con 'glew32s.lib(glew.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
-LINK : warning LNK4098: la biblioteca predeterminada'LIBCMT' entra en conflicto con otras bibliotecas; use la biblioteca /NODEFAULTLIB:biblioteca
-LINK : warning LNK4098: la biblioteca predeterminada'MSVCRT' entra en conflicto con otras bibliotecas; use la biblioteca /NODEFAULTLIB:biblioteca
-  TFG.vcxproj -> C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\x64\Debug\TFG.exe

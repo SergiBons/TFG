@@ -50,7 +50,7 @@ namespace test {
 
         m_Texture = std::make_unique<Texture>("res/textures/testure.png");
         m_Shader->SetUniform1i("u_Texture", 0);//Es a dir, si al bind assginem el slot 1, aqui ficariem un 1.
- }
+    }
 
 
 	TestTexture2D::~TestTexture2D()
@@ -73,6 +73,7 @@ namespace test {
 
         {
             glm::mat4 model = glm::translate(glm::mat4(1.0f), m_TranslationA);
+            
             glm::mat4 mvp = m_Proj * m_View * model;
             m_Shader->Bind();
             m_Shader->SetUniformMat4f("u_MVP", mvp);

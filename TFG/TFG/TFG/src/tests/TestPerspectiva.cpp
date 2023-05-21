@@ -46,9 +46,10 @@ namespace test {
 
         m_Shader = std::make_unique<Shader>("res/Shaders/PerspectiveTest.shader");
         m_Shader->Bind();
-        //m_Texture = std::make_unique<Texture>("res/textures/testure.png");
-        m_Texture = std::make_unique<Texture>("res/textures/testure.png");
         m_Shader->SetUniform1i("u_Texture1", 0);//Es a dir, si al bind assginem el slot 1, aqui ficariem un 1.
+        //m_Texture = std::make_unique<Texture>("res/textures/testure.png");
+        m_Texture = std::make_unique<Texture>("res/textures/testure.png");  
+
 
         //m_Shader->SetUniform1i("u_Texture2", 0);//Es a dir, si al bind assginem el slot 1, aqui ficariem un 1.
     }
@@ -69,14 +70,13 @@ namespace test {
         Renderer renderer;
 
         m_Texture->Bind();//Si passem argument, l'hem de settejar al uniform just a sota
-
+        m_Shader->Bind();
         {
             glm::mat4 model = glm::mat4(1.0f);
 
             //model = glm::rotate(model, glm::radians(-55.0f), m_TranslationA);
             model = glm::translate(model, m_Translation);
             model = glm::rotate(model, glm::radians(m_Rotation), glm::vec3(1.0f, 0.0f, 0.0f));
-            m_Shader->Bind();
             m_Shader->SetUniformMat4f("u_ModelMatrix", model);
             m_Shader->SetUniformMat4f("u_ViewMatrix", m_View);
             m_Shader->SetUniformMat4f("u_ProjectionMatrix", m_Proj);

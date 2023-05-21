@@ -22,6 +22,7 @@
 #include"tests/TestClearColor.h"
 #include"tests/TestTexture2D.h"
 #include"tests/TestPerspectiva.h"
+#include"tests/Test3D.h"
 #include"tests/TestPlayground.h"
 
 int main(void)
@@ -80,6 +81,7 @@ int main(void)
         testMenu->RegisterTest<test::TestClearColor>("Clear Color");
         testMenu->RegisterTest<test::TestTexture2D>("Texture 2D");
         testMenu->RegisterTest<test::TestPerspectiva>("Perspectiva");
+        testMenu->RegisterTest<test::Test3D>("3D");
         testMenu->RegisterTest<test::TestPlayground>("Playground");
 
 

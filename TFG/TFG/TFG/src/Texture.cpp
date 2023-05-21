@@ -31,6 +31,7 @@ Texture::Texture(const std::string& path)
         {
             std::cout << "Failed to load texture" << std::endl;
         }
+        stbi_image_free(data);
     }
     else
     {

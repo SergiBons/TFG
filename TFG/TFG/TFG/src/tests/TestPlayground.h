@@ -19,6 +19,7 @@ namespace test {
 		void OnRender() override;
 		void OnImGuiRender() override;
 	private:
+		float m_Rotation;
 		glm::vec3 m_Translation;
 		std::unique_ptr<VertexArray> m_VAO;
 		std::unique_ptr<IndexBuffer> m_IndexBuffer;

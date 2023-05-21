@@ -69,6 +69,9 @@
     <ClCompile Include="src\tests\TestPlayground.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="src\tests\TestPerspectiva.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\Shaders\Basic.shader" />
@@ -1388,6 +1391,9 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="src\tests\TestPlayground.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tests\TestPerspectiva.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

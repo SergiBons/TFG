@@ -32,9 +32,6 @@ namespace test {
               0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
     };
 
-
-
-
     unsigned int indices[] = {
     0,1,2,
     0,1,3,
@@ -42,24 +39,69 @@ namespace test {
     1,2,3
     };
 
+    float positions2[] = {
+         -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+    };
+
     GLCall(glEnable(GL_BLEND));
     GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
     m_VAO = std::make_unique<VertexArray>();
+    m_VAO1 = std::make_unique<VertexArray>();
 
-
-    m_VertexBuffer = std::make_unique<VertexBuffer>(positions, 12 * 5 * sizeof(float));
+    m_VertexBuffer = std::make_unique<VertexBuffer>(positions2, 36 * 5 * sizeof(float));
+    m_VertexBuffer1 = std::make_unique<VertexBuffer>(positions, 12 * 5 * sizeof(float));
 
     VertexBufferLayout layout;
     layout.Push<float>(3);
     layout.Push<float>(2);
     m_VAO->AddBuffer(*m_VertexBuffer, layout);
+    m_VAO1->AddBuffer(*m_VertexBuffer1, layout);
     //m_IndexBuffer = std::make_unique<IndexBuffer>(indices, 12);
 
     m_Shader = std::make_unique<Shader>("res/Shaders/PerspectiveTest.shader");
     m_Shader->Bind();
     m_Shader->SetUniform1i("u_Texture1", 0);//Es a dir, si al bind assginem el slot 1, aqui ficariem un 1.
-    //m_Texture = std::make_unique<Texture>("res/textures/testure.png");
     m_Texture = std::make_unique<Texture>("res/textures/testure.png");
 
 
@@ -84,7 +126,27 @@ namespace test {
 
         m_Texture->Bind();//Si passem argument, l'hem de settejar al uniform just a sota
         m_Shader->Bind();
+        
         {
+            m_VAO->Bind();
+            glm::mat4 model = glm::mat4(1.0f);
+
+            //model = glm::rotate(model, glm::radians(-55.0f), m_TranslationA);
+            model = glm::translate(model, m_Translation);
+            model = glm::translate(model, glm::vec3(1.0f, 0.0f, 0.0f));
+            model = glm::rotate(model, glm::radians(m_Rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+            model = glm::rotate(model, glm::radians(m_Rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+            model = glm::rotate(model, glm::radians(m_Rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+            m_Shader->SetUniformMat4f("u_ModelMatrix", model);
+            m_Shader->SetUniformMat4f("u_ViewMatrix", m_View);
+            m_Shader->SetUniformMat4f("u_ProjectionMatrix", m_Proj);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+            //renderer.Draw(*m_VAO, *m_IndexBuffer, *m_Shader);
+            //renderer.DrawRaw(*m_VAO, *m_Shader, 12);
+        }
+
+        {
+            m_VAO1->Bind();
             glm::mat4 model = glm::mat4(1.0f);
 
             //model = glm::rotate(model, glm::radians(-55.0f), m_TranslationA);

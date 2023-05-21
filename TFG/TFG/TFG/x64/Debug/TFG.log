@@ -1,12 +1,12 @@
 ﻿  application.cpp
-  Test3D.cpp
-C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\Test3D.cpp(83,18): warning C4101: 'renderer': variable local sin referencia
+  TestMultiobject.cpp
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestMultiobject.cpp(125,18): warning C4101: 'renderer': variable local sin referencia
 C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\memory(3433,56): warning C4244: 'argumento': conversión de '_Ty' a 'unsigned int'; posible pérdida de datos
           with
           [
               _Ty=unsigned __int64
           ]
-C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\Test3D.cpp(51,13): message : Vea la referencia a la creación de una instancia de la función plantilla "std::unique_ptr<VertexBuffer,std::default_delete<VertexBuffer>> std::make_unique<VertexBuffer,float(&)[60],unsigned __int64,0>(float (&)[60],unsigned __int64 &&)" que se está compilando
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestMultiobject.cpp(92,13): message : Vea la referencia a la creación de una instancia de la función plantilla "std::unique_ptr<VertexBuffer,std::default_delete<VertexBuffer>> std::make_unique<VertexBuffer,float(&)[180],unsigned __int64,0>(float (&)[180],unsigned __int64 &&)" que se está compilando
   Generando código...
 glew32s.lib(glew.obj) : warning LNK4099: no se encontró PDB '' con 'glew32s.lib(glew.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
 LINK : warning LNK4098: la biblioteca predeterminada'LIBCMT' entra en conflicto con otras bibliotecas; use la biblioteca /NODEFAULTLIB:biblioteca

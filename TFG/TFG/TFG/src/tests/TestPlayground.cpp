@@ -4,6 +4,7 @@
 
 #include "TestPlayground.h"
 #include "Renderer.h"
+#include "objLoader.h"
 
 namespace test {
 
@@ -99,7 +100,7 @@ namespace test {
     m_VAO1->AddBuffer(*m_VertexBuffer1, layout);
     //m_IndexBuffer = std::make_unique<IndexBuffer>(indices, 12);
 
-    m_Shader = std::make_unique<Shader>("res/Shaders/PerspectiveTest.shader");
+    m_Shader = std::make_unique<Shader>("res/Shaders/Gouraud.shader");
     m_Shader->Bind();
     m_Shader->SetUniform1i("u_Texture1", 0);//Es a dir, si al bind assginem el slot 1, aqui ficariem un 1.
     m_Texture = std::make_unique<Texture>("res/textures/testure.png");
@@ -130,6 +131,7 @@ namespace test {
         {
             m_VAO->Bind();
             glm::mat4 model = glm::mat4(1.0f);
+            glm::mat4 normal = glm::mat4(1.0f);
 
             //model = glm::rotate(model, glm::radians(-55.0f), m_TranslationA);
             model = glm::translate(model, m_Translation);
@@ -137,6 +139,8 @@ namespace test {
             model = glm::rotate(model, glm::radians(m_Rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
             model = glm::rotate(model, glm::radians(m_Rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
             model = glm::rotate(model, glm::radians(m_Rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+            normal = glm::transpose(glm::inverse(m_View * model));
+            m_Shader->SetUniformMat4f("u_NormalMatrix", normal);
             m_Shader->SetUniformMat4f("u_ModelMatrix", model);
             m_Shader->SetUniformMat4f("u_ViewMatrix", m_View);
             m_Shader->SetUniformMat4f("u_ProjectionMatrix", m_Proj);

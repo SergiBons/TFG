@@ -491,6 +491,7 @@
     </None>
     <None Include="res\Shaders\PerspectiveTest.shader" />
     <None Include="res\Shaders\Phong.shader" />
+    <None Include="res\Shaders\Gouraud.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Renderer.h">

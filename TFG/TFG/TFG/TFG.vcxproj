@@ -161,6 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\Shaders\Basic.shader" />
+    <None Include="res\Shaders\Gouraud.shader" />
     <None Include="res\Shaders\PerspectiveTest.shader" />
     <None Include="res\Shaders\Phong.shader" />
     <None Include="src\vendor\glm\detail\func_common.inl" />

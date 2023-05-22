@@ -15,6 +15,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 // VGI: Llibreries OpenGL
 //#include <gl\gl.h>										// Header File For The OpenGL32 Library
 //#include <gl\glu.h>										// Header File For The GLu32 Library
@@ -24,6 +26,7 @@
 // Màxima mida vector VAOList
 #define MAX_SIZE_VAOLIST 125
 
+typedef unsigned int	uint;
 
 struct CVAO
 {

@@ -11,8 +11,10 @@
 //                 http://glvelocity.demonews.com
 //////////////////////////////////////////////////////////////////////
 
-#include "stdafx.h"
 #include "objLoader.h"
+#include "SOIL2/SOIL2.h"
+#include <vector>
+
 
 // OBJ File string indentifiers
 #define VERTEX_ID		 "v"
@@ -37,11 +39,13 @@
 // Maximum number of vertices a that a single face can have
 #define MAX_VERTICES 256
 
+#pragma warning(disable:4996)
+
 // Axis constants
 const short unsigned int x = 0;
 const short unsigned int y = 1;
 const short unsigned int z = 2;
-
+CVAO VAOList[30];
 //////////////////////////////////////////////////////////////////////
 // Construcktion / Destrucktion
 //////////////////////////////////////////////////////////////////////
@@ -59,6 +63,102 @@ _stdcall COBJModel::~COBJModel()
 // Eliminar els VAO's de la llista.
 	netejaVAOList_OBJ();
 }
+
+void deleteVAOList(GLint k)
+{
+	//GLuint vaoId = VAOList[k].vaoId;
+	//GLuint vboId = VAOList[k].vboId;
+
+	if (VAOList[k].vaoId != 0)
+	{
+		glBindVertexArray(VAOList[k].vaoId); //glBindVertexArray(vaoId);
+		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(2);
+		glDisableVertexAttribArray(3);
+
+		// It is good idea to release VBOs with ID 0 after use.
+		// Once bound with 0, all pointers in gl*Pointer() behave as real
+		// pointer, so, normal vertex array operations are re-activated
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glDeleteBuffers(1, &VAOList[k].vboId);// glDeleteBuffers(1, &vboId);
+
+		// Delete EBO
+		glDeleteBuffers(1, &VAOList[k].eboId);// glDeleteBuffers(1, &eboId);
+
+		// Unbind and delete VAO
+		glBindVertexArray(0);
+		glDeleteVertexArrays(1, &VAOList[k].vaoId);	// glDeleteVertexArrays(1, &vaoId);
+
+		VAOList[k].vaoId = 0;
+		VAOList[k].vboId = 0;
+		VAOList[k].eboId = 0;
+		VAOList[k].nVertexs = 0;
+		VAOList[k].nIndices = 0;
+	}
+}
+
+CVAO load_TRIANGLES_VAO(std::vector <double> vertices, std::vector <double> normals, std::vector <double> colors, std::vector <double> textures)
+{
+	// ----------------------- VAO
+	CVAO tmpVAO;
+	tmpVAO.vaoId = 0;	tmpVAO.vboId = 0;	tmpVAO.nVertexs = 0;
+
+	std::vector <int>::size_type nv = vertices.size();	// Tamany del vector vertices en elements.
+	//std::vector <int>::size_type nn = normals.size();	// Tamany del vector normals en elements.
+	//std::vector <int>::size_type nc = colors.size();	// Tamany del vector colors en elements.
+	//std::vector <int>::size_type nt = textures.size();	// Tamany del vector textures en elements.
+
+// Create Vertex Array Object (VAO) for 3D Model Cube
+	glGenVertexArrays(1, &tmpVAO.vaoId);
+
+	// Create vertex buffer objects for 3D Model attributes in the VAO
+	glGenBuffers(1, &tmpVAO.vboId);
+
+	// Bind our Vertex Array Object as the current used object
+	glBindVertexArray(tmpVAO.vaoId);
+
+	// Bind our Vertex Buffer Object as the current used object
+	glBindBuffer(GL_ARRAY_BUFFER, tmpVAO.vboId);
+
+	glBufferData(GL_ARRAY_BUFFER, (vertices.size() + normals.size() + textures.size() + colors.size()) * sizeof(double), 0, GL_STATIC_DRAW);
+
+	// Position Vertex attributes
+	glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(double), &vertices[0]);	// Copy geometry data to VBO starting from 0 offset
+	glEnableVertexAttribArray(0);											// Enable attribute index 0 as being used (position)
+	glVertexAttribPointer(0, 3, GL_DOUBLE, GL_FALSE, 3 * sizeof(double), 0);	// Specify that our coordinate data is going into attribute index 0 and contains 3 double
+
+	// Normal Vertex Attributes
+	glBufferSubData(GL_ARRAY_BUFFER, vertices.size() * sizeof(double), normals.size() * sizeof(double), &normals[0]);	// Copy normal data to VBO starting from 0 offest
+	glEnableVertexAttribArray(1);											// Enable attribute index 1 as being used (normals)
+	glVertexAttribPointer(1, 3, GL_DOUBLE, GL_FALSE, 3 * sizeof(double), (GLvoid*)(vertices.size() * sizeof(double)));	// Specify that our color data is going into attribute index 0 and contains 3 double
+
+	// Texture Coordinates Vertex Attributes
+	glBufferSubData(GL_ARRAY_BUFFER, (vertices.size() + normals.size()) * sizeof(double), textures.size() * sizeof(double), &textures[0]);	// Copy normal data to VBO starting from 0 offest
+	glEnableVertexAttribArray(2);												// Enable attribute index 2 as being used (texture coordinates)
+	glVertexAttribPointer(2, 2, GL_DOUBLE, GL_FALSE, 2 * sizeof(double), (GLvoid*)((vertices.size() + normals.size()) * sizeof(double)));						// Specify that our color data is going into attribute index 0 and contains 3 double
+
+	// Color Vertex Attributes
+	glBufferSubData(GL_ARRAY_BUFFER, (vertices.size() + normals.size() + textures.size()) * sizeof(double), colors.size() * sizeof(double), &colors[0]);	// Copy normal data to VBO starting from 0 offest
+	glEnableVertexAttribArray(3);												// Enable attribute index 3 as being used
+	glVertexAttribPointer(3, 4, GL_DOUBLE, GL_FALSE, 4 * sizeof(double), (GLvoid*)((vertices.size() + normals.size() + textures.size()) * sizeof(double)));	// Specify that our color data is going into attribute index 0 and contains 3 double
+
+	// Dissable Attrib arrays
+		//glDisableVertexAttribArray(0);
+		//glDisableVertexAttribArray(1);
+		//glDisableVertexAttribArray(2);
+		//glDisableVertexAttribArray(3);
+
+	// Unbind VAO, to prevent bugs
+	glBindVertexArray(0);
+
+	tmpVAO.nVertexs = (int)vertices.size() / 3;
+	tmpVAO.nIndices = 0;
+
+	return tmpVAO;	// retorna CVAO.
+}
+
+
 
 //bool _stdcall COBJModel::LoadModel(const char szFileName[],unsigned int iDisplayList)
 //GLuint _stdcall COBJModel::LoadModel(char *szFileName, int prim_Id)
@@ -84,7 +184,7 @@ int _stdcall COBJModel::LoadModel(char* szFileName)
 	initVAOList_OBJ();
 
 // Get base path
-	strcpy(szBasePath, szFileName);
+	strcpy_s(szBasePath, szFileName);
 	MakePath(szBasePath);
 
 ////////////////////////////////////////////////////////////////////////
@@ -141,7 +241,7 @@ int _stdcall COBJModel::LoadModel(char* szFileName)
 		if (!strncmp(szString, VERTEX_ID, sizeof(VERTEX_ID)))
 		{
 			// Read three floats out of the file
-			nScanReturn = fscanf_s(hFile, "%f %f %f",
+			nScanReturn = fscanf(hFile, "%f %f %f",
 				&pVertices[CurrentIndex.iVertexCount].fX,
 				&pVertices[CurrentIndex.iVertexCount].fY,
 				&pVertices[CurrentIndex.iVertexCount].fZ);
@@ -153,7 +253,7 @@ int _stdcall COBJModel::LoadModel(char* szFileName)
 		if (!strncmp(szString, TEXCOORD_ID, sizeof(TEXCOORD_ID)))
 		{
 			// Read two floats out of the file
-			nScanReturn = fscanf_s(hFile, "%f %f",
+			nScanReturn = fscanf(hFile, "%f %f",
 				&pTexCoords[CurrentIndex.iTexCoordCount].fX,
 				&pTexCoords[CurrentIndex.iTexCoordCount].fY);
 			// Next texture coordinate
@@ -164,7 +264,7 @@ int _stdcall COBJModel::LoadModel(char* szFileName)
 		if (!strncmp(szString, NORMAL_ID, sizeof(NORMAL_ID)))
 		{
 			// Read three floats out of the file
-			nScanReturn = fscanf_s(hFile, "%f %f %f",
+			nScanReturn = fscanf(hFile, "%f %f %f",
 				&pNormals[CurrentIndex.iNormalCount].fX,
 				&pNormals[CurrentIndex.iNormalCount].fY,
 				&pNormals[CurrentIndex.iNormalCount].fZ);

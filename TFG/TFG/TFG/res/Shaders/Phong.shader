@@ -38,7 +38,7 @@ uniform mat4 u_ProjectionMatrix;	// Projection Matrix
 uniform mat4 u_ViewMatrix; 	// View Matrix
 uniform mat4 u_ModelMatrix;	// Model Matrix
 
-uniform sampler2D u_Texture;	// Imatge textura
+uniform sampler2D u_Texture1;	// Imatge textura
 uniform bool textur;		// Booleana d’activació (TRUE) de textures o no (FALSE).
 uniform bool flag_invert_y;	// Booleana que activa la inversió coordenada textura t (o Y) a 1.0-cty segons llibreria SOIL (TRUE) o no (FALSE).
 uniform bool fixedLight;	// Booleana que defineix la font de llum fixe en Coordenades Món (TRUE) o no (FALSE).

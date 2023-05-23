@@ -1,11 +1,3 @@
 ﻿  TestPlayground.cpp
-C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestPlayground.cpp(166,18): warning C4101: 'renderer': variable local sin referencia
-C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestPlayground.cpp(165,24): warning C4101: 'angh': variable local sin referencia
-C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestPlayground.cpp(165,18): warning C4101: 'angv': variable local sin referencia
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\memory(3433,56): warning C4244: 'argumento': conversión de '_Ty' a 'unsigned int'; posible pérdida de datos
-          with
-          [
-              _Ty=unsigned __int64
-          ]
-C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestPlayground.cpp(124,13): message : Vea la referencia a la creación de una instancia de la función plantilla "std::unique_ptr<VertexBuffer,std::default_delete<VertexBuffer>> std::make_unique<VertexBuffer,float(&)[180],unsigned __int64,0>(float (&)[180],unsigned __int64 &&)" que se está compilando
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestPlayground.cpp(68,18): warning C4101: 'renderer': variable local sin referencia
   TFG.vcxproj -> C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\x64\Debug\TFG.exe

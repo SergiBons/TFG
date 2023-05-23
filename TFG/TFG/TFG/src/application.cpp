@@ -81,13 +81,14 @@ int main(void)
         test::TestMenu* testMenu = new test::TestMenu(currentTest);
         currentTest = testMenu;
 
+        testMenu->RegisterTest<test::TestPlayground>("Playground");
         testMenu->RegisterTest<test::TestClearColor>("Clear Color");
         testMenu->RegisterTest<test::TestTexture2D>("Texture 2D");
         testMenu->RegisterTest<test::TestPerspectiva>("Perspectiva");
         testMenu->RegisterTest<test::Test3D>("3D");
         testMenu->RegisterTest<test::TestMultiobject>("Multiobject");
         testMenu->RegisterTest<test::TestGouraud>("Gouraud (WIP)");
-        testMenu->RegisterTest<test::TestPlayground>("Playground");
+
 
 
         while (!glfwWindowShouldClose(window))

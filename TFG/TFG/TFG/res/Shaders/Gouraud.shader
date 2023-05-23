@@ -40,7 +40,7 @@ uniform mat4 u_ModelMatrix;	// Model Matrix.
 
 uniform sampler2D u_Texture1;	// Imatge textura
 uniform bool textur;		// Booleana d’activació (TRUE) de textures o no (FALSE).
-uniform bool flag_invert_y;	// Booleana que activa la inversió coordenada textura t (o Y) a 1.0-cty segons llibreria SOIL (TRUE) o no (FALSE).
+uniform bool u_FlagInvertY;	// Booleana que activa la inversió coordenada textura t (o Y) a 1.0-cty segons llibreria SOIL (TRUE) o no (FALSE).
 uniform bool fixedLight;	// Booleana que defineix la font de llum fixe en Coordenades Món (TRUE) o no (FALSE).
 uniform bool sw_material;	// Booleana que indica si el color del vèrtex ve del Material emission, ambient, diffue, specular (TRUE) o del vector de color del vèrtex in_Color (FALSE)
 uniform bvec4 sw_intensity;	// Filtre per a cada tipus de reflexió: Emissiva (sw_intensity[0]), Ambient (sw_intensity[1]), Difusa (sw_intensity[2]) o Especular (sw_intensity[2]).
@@ -74,7 +74,7 @@ void main ()	// --- L64-
 
 // --- L84- Textura
         //VertexTexCoord = in_TexCoord;
-	if (flag_invert_y) VertexTexCoord = vec2(in_TexCoord.x,1.0-in_TexCoord.y); // SOIL_FLAG_INVERT_Y
+	if (u_FlagInvertY) VertexTexCoord = vec2(in_TexCoord.x,1.0-in_TexCoord.y); // SOIL_u_FlagInvertY
  	 else VertexTexCoord = vec2(in_TexCoord.x,in_TexCoord.y);
 
 // --- L89- Compute emissive term

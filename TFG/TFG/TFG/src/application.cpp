@@ -24,7 +24,9 @@
 #include"tests/TestPerspectiva.h"
 #include"tests/Test3D.h"
 #include"tests/TestMultiobject.h"
+#include"tests/TestGouraud.h"
 #include"tests/TestPlayground.h"
+const double PI = 3.14159;
 
 int main(void)
 {
@@ -84,6 +86,7 @@ int main(void)
         testMenu->RegisterTest<test::TestPerspectiva>("Perspectiva");
         testMenu->RegisterTest<test::Test3D>("3D");
         testMenu->RegisterTest<test::TestMultiobject>("Multiobject");
+        testMenu->RegisterTest<test::TestGouraud>("Gouraud (WIP)");
         testMenu->RegisterTest<test::TestPlayground>("Playground");
 
 

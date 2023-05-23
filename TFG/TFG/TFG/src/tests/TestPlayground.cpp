@@ -17,8 +17,9 @@ namespace test {
         m_Rotation(glm::vec3(0.0f, 0.0f, 0.0f))
     {
 
-        GLCall(glEnable(GL_BLEND));
-        GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+
+        std::string nomFitxer = "res/Models/MC/MainChar.obj";
+        m_ObOBJ.LoadModel(const_cast<char*>(nomFitxer.c_str()));
         /*
         VertexBufferLayout layout;
         layout.Push<float>(3);
@@ -27,8 +28,7 @@ namespace test {
         m_VAO1->AddBuffer(*m_VertexBuffer1, layout);
         */
         //m_IndexBuffer = std::make_unique<IndexBuffer>(indices, 12);
-        std::string nomFitxer = "res/Models/Tile1_1/Tile1_1.obj";
-        m_ObOBJ.LoadModel(const_cast<char*>(nomFitxer.c_str()));
+
             
 
 

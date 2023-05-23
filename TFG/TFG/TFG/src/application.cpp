@@ -26,18 +26,19 @@
 #include"tests/TestMultiobject.h"
 #include"tests/TestGouraud.h"
 #include"tests/TestPlayground.h"
-const double PI = 3.14159;
+#include"tests/TestCamera.h"
+
 
 int main(void)
 {
+    
     GLFWwindow* window;
-
     /* Initialize the library */
     if (!glfwInit())
         return -1;
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(960, 540, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(1920, 1080, "Hello World", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -46,10 +47,6 @@ int main(void)
 
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
-
-
-
-
 
     glfwSwapInterval(1);
 
@@ -79,8 +76,10 @@ int main(void)
 
         test::Test* currentTest = nullptr;
         test::TestMenu* testMenu = new test::TestMenu(currentTest);
-        currentTest = testMenu;
+        test::TestCamera* testCamera = new test::TestCamera(window);
 
+
+        currentTest = testMenu;
         testMenu->RegisterTest<test::TestPlayground>("Playground");
         testMenu->RegisterTest<test::TestClearColor>("Clear Color");
         testMenu->RegisterTest<test::TestTexture2D>("Texture 2D");
@@ -88,7 +87,7 @@ int main(void)
         testMenu->RegisterTest<test::Test3D>("3D");
         testMenu->RegisterTest<test::TestMultiobject>("Multiobject");
         testMenu->RegisterTest<test::TestGouraud>("Gouraud (WIP)");
-
+        currentTest = testCamera;
 
 
         while (!glfwWindowShouldClose(window))

@@ -145,6 +145,7 @@
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\tests\Test.cpp" />
     <ClCompile Include="src\tests\Test3D.cpp" />
+    <ClCompile Include="src\tests\TestCamera.cpp" />
     <ClCompile Include="src\tests\TestClearColor.cpp" />
     <ClCompile Include="src\tests\TestGouraud.cpp" />
     <ClCompile Include="src\tests\TestMultiobject.cpp" />
@@ -310,6 +311,7 @@
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\tests\Test.h" />
     <ClInclude Include="src\tests\Test3D.h" />
+    <ClInclude Include="src\tests\TestCamera.h" />
     <ClInclude Include="src\tests\TestClearColor.h" />
     <ClInclude Include="src\tests\TestGouraud.h" />
     <ClInclude Include="src\tests\TestMultiobject.h" />

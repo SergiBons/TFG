@@ -27,6 +27,7 @@
 #include"tests/TestGouraud.h"
 #include"tests/TestPlayground.h"
 #include"tests/TestCamera.h"
+#include"tests/TestImported.h"
 
 
 int main(void)
@@ -87,7 +88,8 @@ int main(void)
         testMenu->RegisterTest<test::Test3D>("3D");
         testMenu->RegisterTest<test::TestMultiobject>("Multiobject");
         testMenu->RegisterTest<test::TestGouraud>("Gouraud (WIP)");
-        currentTest = testCamera;
+        testMenu->RegisterTest<test::TestImported>("Imported");
+
 
 
         while (!glfwWindowShouldClose(window))
@@ -102,8 +104,11 @@ int main(void)
                 currentTest->OnUpdate(0.0f);
                 currentTest->OnRender();
                 ImGui::Begin("Test");
+                if (ImGui::Button("Camera"))
+                    currentTest = testCamera;
                 if (currentTest != testMenu && ImGui::Button("<-"))
                 {
+                    
                     delete currentTest;
                     currentTest = testMenu;
                 }

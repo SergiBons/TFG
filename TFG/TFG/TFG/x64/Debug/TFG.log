@@ -1,25 +1,5 @@
-﻿  TestCamera.cpp
+﻿  TestImprted.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': redefinición de macro
 C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\Dependencies\GLFW\include\GLFW\glfw3.h(123,1): message : vea la definición anterior de 'APIENTRY'
-C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestCamera.cpp(62,35): warning C4305: '=': truncamiento de 'double' a 'T'
-          with
-          [
-              T=float
-          ]
-C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestCamera.cpp(69,40): warning C4305: '=': truncamiento de 'double' a 'T'
-          with
-          [
-              T=float
-          ]
-C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestCamera.cpp(77,36): warning C4305: '=': truncamiento de 'double' a 'T'
-          with
-          [
-              T=float
-          ]
-C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestCamera.cpp(84,39): warning C4305: '=': truncamiento de 'double' a 'T'
-          with
-          [
-              T=float
-          ]
-C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestCamera.cpp(98,18): warning C4101: 'renderer': variable local sin referencia
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(68,18): warning C4101: 'renderer': variable local sin referencia
   TFG.vcxproj -> C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\x64\Debug\TFG.exe

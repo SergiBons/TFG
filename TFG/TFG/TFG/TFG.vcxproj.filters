@@ -78,13 +78,13 @@
     <ClCompile Include="src\objLoader.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="src\tests\TestGouraud.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="src\tests\TestCamera.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="src\tests\TestImprted.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\board\Board.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
@@ -499,8 +499,8 @@
       <Filter>Archivos de encabezado</Filter>
     </None>
     <None Include="res\Shaders\PerspectiveTest.shader" />
-    <None Include="res\Shaders\Phong.shader" />
     <None Include="res\Shaders\Gouraud.shader" />
+    <None Include="res\Shaders\Phong.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Renderer.h">
@@ -1418,13 +1418,13 @@
     <ClInclude Include="src\objLoader.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="src\tests\TestGouraud.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="src\tests\TestCamera.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="src\tests\TestImported.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\board\Board.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

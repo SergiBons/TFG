@@ -1,5 +1,53 @@
 ﻿  TestImprted.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': redefinición de macro
 C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\Dependencies\GLFW\include\GLFW\glfw3.h(123,1): message : vea la definición anterior de 'APIENTRY'
-C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(68,18): warning C4101: 'renderer': variable local sin referencia
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(174,56): warning C4244: '=': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(175,56): warning C4244: '=': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(176,44): warning C4244: '=': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(182,160): warning C4244: 'argumento': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(182,136): warning C4244: 'argumento': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(182,112): warning C4244: 'argumento': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(193,56): warning C4244: '=': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(194,56): warning C4244: '=': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(195,44): warning C4244: '=': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(201,160): warning C4244: 'argumento': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(201,136): warning C4244: 'argumento': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(201,112): warning C4244: 'argumento': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(212,56): warning C4244: '=': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(213,56): warning C4244: '=': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(214,44): warning C4244: '=': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(220,160): warning C4244: 'argumento': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(220,136): warning C4244: 'argumento': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(220,112): warning C4244: 'argumento': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(231,56): warning C4244: '=': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(232,56): warning C4244: '=': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(233,44): warning C4244: '=': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(239,160): warning C4244: 'argumento': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(239,136): warning C4244: 'argumento': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(239,112): warning C4244: 'argumento': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(250,56): warning C4244: '=': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(251,56): warning C4244: '=': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(252,44): warning C4244: '=': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(258,160): warning C4244: 'argumento': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(258,136): warning C4244: 'argumento': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(258,112): warning C4244: 'argumento': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(269,56): warning C4244: '=': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(270,56): warning C4244: '=': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(271,44): warning C4244: '=': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(277,160): warning C4244: 'argumento': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(277,136): warning C4244: 'argumento': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(277,112): warning C4244: 'argumento': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(288,56): warning C4244: '=': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(289,56): warning C4244: '=': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(290,44): warning C4244: '=': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(296,160): warning C4244: 'argumento': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(296,136): warning C4244: 'argumento': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(296,112): warning C4244: 'argumento': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(307,56): warning C4244: '=': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(308,56): warning C4244: '=': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(309,44): warning C4244: '=': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(315,160): warning C4244: 'argumento': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(315,136): warning C4244: 'argumento': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(315,112): warning C4244: 'argumento': conversión de 'GLdouble' a 'GLfloat'; posible pérdida de datos
+C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\TFG\src\tests\TestImprted.cpp(167,18): warning C4101: 'renderer': variable local sin referencia
   TFG.vcxproj -> C:\Users\sbons\OneDrive\Documentos\GitHub\TFG\TFG\TFG\x64\Debug\TFG.exe

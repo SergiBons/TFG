@@ -33,12 +33,12 @@ layout (location = 2) in vec2 in_TexCoord; 	// Coordenades (s,t) Coordenada text
 layout (location = 3) in vec4 in_Color; 	// Coordenades (r,g,b,a) Color
 
 // --- L44- Variables uniform
-uniform mat4 normalMatrix;	// “the transpose of the inverse of the gl_Modelu_ViewMatrix.” 
-uniform mat4 u_ProjectionMatrix;	// Projection Matrix
-uniform mat4 u_ViewMatrix; 	// View Matrix
-uniform mat4 u_ModelMatrix;	// Model Matrix
+uniform mat4 normalMatrix;	// “the transpose of the inverse of the gl_ModelViewMatrix.” 
+uniform mat4 projectionMatrix;	// Projection Matrix
+uniform mat4 viewMatrix; 	// View Matrix
+uniform mat4 modelMatrix;	// Model Matrix
 
-uniform sampler2D u_Texture1;	// Imatge textura
+uniform sampler2D texture0;	// Imatge textura
 uniform bool textur;		// Booleana d’activació (TRUE) de textures o no (FALSE).
 uniform bool flag_invert_y;	// Booleana que activa la inversió coordenada textura t (o Y) a 1.0-cty segons llibreria SOIL (TRUE) o no (FALSE).
 uniform bool fixedLight;	// Booleana que defineix la font de llum fixe en Coordenades Món (TRUE) o no (FALSE).
@@ -57,9 +57,9 @@ out vec4 vertexColor;
 void main()	// --- L66-
 {
 // --- L68- Calcul variables out.
-    vertexPV = vec3(u_ViewMatrix * u_ModelMatrix * vec4(in_Vertex,1.0));
+    vertexPV = vec3(viewMatrix * modelMatrix * vec4(in_Vertex,1.0));
 
-    //mat4 NormalMatrix = transpose(inverse(u_ViewMatrix * u_ModelMatrix));
+    //mat4 NormalMatrix = transpose(inverse(viewMatrix * modelMatrix));
     vec3 N = vec3(normalMatrix * vec4(in_Normal,1.0));
     vertexNormalPV = normalize(N);
 
@@ -71,8 +71,12 @@ void main()	// --- L66-
     vertexColor = in_Color;
 
 // --- L82- Transformacio de Visualitzacio amb Matriu Projeccio (PMatrix), Matriu Càmera (VMatrix) i Matriu TG (MMatrix)
-    gl_Position = vec4(u_ProjectionMatrix * u_ViewMatrix * u_ModelMatrix * vec4(in_Vertex,1.0));
+    gl_Position = vec4(projectionMatrix * viewMatrix * modelMatrix * vec4(in_Vertex,1.0));
 }
+
+
+
+
 
 
 #shader fragment
@@ -110,12 +114,12 @@ in vec2 vertexTexCoord;		// Coordenades textura.
 in vec4 vertexColor;		// Color (r,g,b,a) del vèrtex.
 
 // ---- L44- Variables uniform
-uniform mat4 normalMatrix;	// “the transpose of the inverse of the gl_Modelu_ViewMatrix.” 
-uniform mat4 u_ProjectionMatrix;	// Projection Matrix
-uniform mat4 u_ViewMatrix; 	// View Matrix
-uniform mat4 u_ModelMatrix;	// Model Matrix
+uniform mat4 normalMatrix;	// “the transpose of the inverse of the gl_ModelViewMatrix.” 
+uniform mat4 projectionMatrix;	// Projection Matrix
+uniform mat4 viewMatrix; 	// View Matrix
+uniform mat4 modelMatrix;	// Model Matrix
 
-uniform sampler2D u_Texture;	// Imatge textura
+uniform sampler2D texture0;	// Imatge textura
 uniform bool textur;		// Booleana d’activació (TRUE) de textures o no (FALSE).
 uniform bool flag_invert_y;	// Booleana que activa la inversió coordenada textura t (o Y) a 1.0-cty segons llibreria SOIL (TRUE) o no (FALSE).
 uniform bool modulate;		// Booleana d'activació de barreja color textura- color intensitat llum (TRUE) o només color textura (FALSE)
@@ -132,7 +136,7 @@ out vec4 FragColor; 		// Color fragment (r,g,b,a)
 void main ()
 {
 // ---- L66- Calcul variables previes
-    //mat4 NormalMatrix = transpose(inverse(u_ViewMatrix * u_ModelMatrix));
+    //mat4 NormalMatrix = transpose(inverse(viewMatrix * modelMatrix));
     vec3 N = normalize(vertexNormalPV);
     vec3 V = normalize(-vertexPV);
   
@@ -169,7 +173,7 @@ void main ()
 	if (LightSource[i].sw_light) { 
 		fatt = 1.0; 	// Inicialitzar factor d'atenuació.
 		// ---- L103- Compute light position (fixed in WC of attached to camera)
-		if (fixedLight) lightPosition = u_ViewMatrix * LightSource[i].position;
+		if (fixedLight) lightPosition = viewMatrix * LightSource[i].position;
 		  else lightPosition = LightSource[i].position; // vec4(-vertexPV,1.0);
 		
 		// ---- L107- Compute point light source (w=1) or direccional light (w=0)
@@ -220,7 +224,7 @@ void main ()
    fragmentColor.a = vertexColor.a;
 
    if (textur) { // Intensitat amb textura
-		 vec4 colorT = texture(u_Texture,vertexTexCoord);
+		 vec4 colorT = texture(texture0,vertexTexCoord);
 		// Textura modulada amb intensitat llum
 	    	if (modulate) FragColor = colorT * fragmentColor;
        			else FragColor = colorT; // textura sense modular intensitat llum

@@ -24,7 +24,7 @@
 #include"tests/TestPerspectiva.h"
 #include"tests/Test3D.h"
 #include"tests/TestMultiobject.h"
-#include"tests/TestGouraud.h"
+//#include"tests/TestPhong.h"
 #include"tests/TestPlayground.h"
 #include"tests/TestCamera.h"
 #include"tests/TestImported.h"
@@ -87,7 +87,7 @@ int main(void)
         testMenu->RegisterTest<test::TestPerspectiva>("Perspectiva");
         testMenu->RegisterTest<test::Test3D>("3D");
         testMenu->RegisterTest<test::TestMultiobject>("Multiobject");
-        testMenu->RegisterTest<test::TestGouraud>("Gouraud (WIP)");
+        //testMenu->RegisterTest<test::TestPhong>("Phong (WIP)");
         testMenu->RegisterTest<test::TestImported>("Imported");
 
 

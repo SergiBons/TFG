@@ -9,8 +9,6 @@
 #include <memory>
 namespace test {
 
-
-
 	class TestPlayground : public Test
 	{
 	public:
@@ -21,10 +19,12 @@ namespace test {
 		void OnRender() override;
 		void OnImGuiRender() override;
 	private:
+		int m_sizeSlide;
+		LLUM m_Lumin[8];
 		glm::vec3 m_Rotation;
 		glm::vec3 m_Translation;
 		std::unique_ptr<VertexArray> m_VAO;
-		std::unique_ptr<IndexBuffer> m_IndexBuffer;		
+		std::unique_ptr<IndexBuffer> m_IndexBuffer;
 		std::unique_ptr<VertexArray> m_VAO1;
 		std::unique_ptr<Shader> m_Shader;
 		std::unique_ptr<Texture> m_Texture;

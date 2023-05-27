@@ -1689,6 +1689,7 @@ void _stdcall COBJModel::Set_VAOList_OBJ(GLint k, CVAO auxVAO)
 }
 
 
+
 void _stdcall COBJModel::netejaVAOList_OBJ()
 {
 	GLint i;

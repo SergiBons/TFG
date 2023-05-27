@@ -87,6 +87,9 @@
     <ClCompile Include="src\board\Board.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="src\tests\TestMultiDrawCalls.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\Shaders\Basic.shader" />
@@ -1425,6 +1428,9 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="src\board\Board.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tests\TestMultiDrawCalls.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

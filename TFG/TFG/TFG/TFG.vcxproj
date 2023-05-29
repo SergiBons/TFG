@@ -153,6 +153,7 @@
     <ClCompile Include="src\tests\TestMultiobject.cpp" />
     <ClCompile Include="src\tests\TestPerspectiva.cpp" />
     <ClCompile Include="src\tests\TestPlayground.cpp" />
+    <ClCompile Include="src\tests\TestRainbowRoad.cpp" />
     <ClCompile Include="src\tests\TestTexture2D.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\vendor\glm\detail\glm.cpp" />
@@ -321,6 +322,7 @@
     <ClInclude Include="src\tests\TestMultiobject.h" />
     <ClInclude Include="src\tests\TestPerspectiva.h" />
     <ClInclude Include="src\tests\TestPlayground.h" />
+    <ClInclude Include="src\tests\TestRainbowRoad.h" />
     <ClInclude Include="src\tests\TestTexture2D.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\vendor\glm\common.hpp" />

@@ -6,19 +6,15 @@ class Board
 {
 private:
 	char m_CurrentLevel;
-	std::vector<std::vector<char>> m_BoardLayout;
-	char m_Presets[9][9][10];
+	std::vector<char*>m_Presets;
 public:
-	Board(const unsigned int* data, unsigned int count);
+	char* m_BoardLayout;
+	Board(char level, char* Board, std::vector<char*> Presets);
 	~Board();
 
 
 	unsigned int getCurrentLevel() const { return  m_CurrentLevel; }
-
-
-
-
-
-
+	void print();
 	void DrawBoard(glm::mat4 M, glm::mat4 V, glm::mat4 P);
+	void genBoard();
 };

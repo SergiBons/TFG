@@ -4,7 +4,6 @@
 
 #include "TestPlayground.h"
 #include "Renderer.h"
-
 #include <string>
 
 
@@ -15,14 +14,35 @@ namespace test {
     test::TestPlayground::TestPlayground()
         :m_Proj(glm::perspective(glm::radians(45.0f), 960.0f / 540.0f, 0.1f, 100.0f)),
         m_View(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f))),
-        m_Rotation(glm::vec3(0.0f, 0.0f, 0.0f))
+        m_Rotation(glm::vec3(0.0f, 0.0f, 0.0f)), m_Slider(0)
     {
+
 
         float w = 960.0f;
         float h = 540.0f;
+        for (int i = 0; i < sizeof(m_random) / 4; i++)
+        {
+            m_random[i] = i % 8;
+        }
 
-        std::string nomFitxer = "res/Models/Tile1_1/Tile1_1.obj";
-        m_ObOBJ.LoadModel(const_cast<char*>(nomFitxer.c_str()));
+        std::string nomFitxer = "res/Models/Tile1_11/Tile1_11.obj";
+        m_ObOBJ[0].LoadModel(const_cast<char*>(nomFitxer.c_str()));
+        nomFitxer = "res/Models/Tile1_12/Tile1_12.obj";
+        m_ObOBJ[1].LoadModel(const_cast<char*>(nomFitxer.c_str()));
+        nomFitxer = "res/Models/Tile1_13/Tile1_13.obj";
+        m_ObOBJ[2].LoadModel(const_cast<char*>(nomFitxer.c_str()));
+        nomFitxer = "res/Models/Tile1_14/Tile1_14.obj";
+        m_ObOBJ[3].LoadModel(const_cast<char*>(nomFitxer.c_str()));
+        nomFitxer = "res/Models/Tile1_21/Tile1_21.obj";
+        m_ObOBJ[4].LoadModel(const_cast<char*>(nomFitxer.c_str()));
+        nomFitxer = "res/Models/Tile1_22/Tile1_22.obj";
+        m_ObOBJ[5].LoadModel(const_cast<char*>(nomFitxer.c_str()));
+        nomFitxer = "res/Models/Tile1_23/Tile1_23.obj";
+        m_ObOBJ[6].LoadModel(const_cast<char*>(nomFitxer.c_str()));
+        nomFitxer = "res/Models/Tile1_24/Tile1_24.obj";
+        m_ObOBJ[7].LoadModel(const_cast<char*>(nomFitxer.c_str()));
+        nomFitxer = "res/Models/MC/MainChar.obj";
+        m_ObOBJ[8].LoadModel(const_cast<char*>(nomFitxer.c_str()));
         /*
         VertexBufferLayout layout;
         layout.Push<float>(3);
@@ -138,6 +158,74 @@ namespace test {
 
         //m_IndexBuffer = std::make_unique<IndexBuffer>(indices, 12);
 
+        std::vector<char*> presets;
+        char a1[192] =
+        {
+
+                        '1',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+
+                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+
+                        '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+                        '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+                        '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+                        '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+                        '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+                        '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+                        '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+                        '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1'
+
+        };
+        presets.push_back(a1);
+        char a2[192] = {
+
+                    '1',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0'
+                ,
+
+                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0'
+                ,
+
+                    '0',  '0',  '0',  '1',  '0',  '0',  '0',  '0',
+                    '0',  '0',  '0',  '1',  '0',  '0',  '0',  '0',
+                    '0',  '0',  '0',  '1',  '0',  '0',  '0',  '0',
+                    '1',  '1',  '1',  '1',  '1',  '0',  '0',  '0',
+                    '0',  '0',  '0',  '1',  '1',  '1',  '1',  '1',
+                    '0',  '0',  '0',  '1',  '0',  '0',  '0',  '0',
+                    '0',  '0',  '0',  '1',  '0',  '0',  '0',  '0',
+                    '0',  '0',  '0',  '1',  '0',  '0',  '0',  '0'
+
+        };
+        presets.push_back(a2);
+        m_Board = std::make_unique<Board>('0', ((char*)malloc((2 * 25 * 10) * 10 * 3 * sizeof(char))), presets);
+        m_Board->genBoard(); //<3
         m_Shader = std::make_unique<Shader>("res/Shaders/Phong.shader");
         m_Shader->Bind();
         GLfloat ambientg[] = { .5,.5,.5,1.0 };
@@ -321,39 +409,38 @@ namespace test {
         glUniform1i(glGetUniformLocation(m_Shader->GetID(), "LightSource[7].sw_light"), m_Lumin[0].encesa);
 
 
-        m_Shader->Bind();
-        for (int i = 0; i<m_sizeSlide; i++)
-        {
-            for (int j = 0; j < 20; j++)
+        for (int i = 0; i< 20; i++)
+            for (int j = m_Slider; j < (m_Slider + 30); j++)
             {
                 glm::mat4 model = glm::mat4(1.0f);
                 glm::mat4 normal = glm::mat4(1.0f);
-                //model = glm::rotate(model, glm::radians(-55.0f), m_TranslationA);
                 model = glm::translate(model, m_Translation);
-                model = glm::scale(model, glm::vec3(0.5f,0.5f,0.5f));
-                model = glm::translate(model, glm::vec3((1.0f + i * 2.0f), 0.0f, 0.0f));
-                model = glm::translate(model, glm::vec3(0.0f, (j * 2.0f), 0.0f));
-                model = glm::rotate(model, glm::radians(m_Rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-                model = glm::rotate(model, glm::radians(m_Rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-                model = glm::rotate(model, glm::radians(m_Rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+                model = glm::translate(model, glm::vec3(1.0f * j, -2.5f, 1.0f * (i-1)));
+                model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
                 normal = glm::transpose(glm::inverse(m_View * model));
 
                 m_Shader->SetUniformMat4f("normalMatrix", normal);
                 m_Shader->SetUniformMat4f("viewMatrix", m_View);
                 m_Shader->SetUniformMat4f("modelMatrix", model);
                 m_Shader->SetUniformMat4f("projectionMatrix", m_Proj); //
-                m_ObOBJ.draw_TriVAO_OBJ(m_Shader->GetID());
+                int value = (int)m_Board->m_BoardLayout[j + i * 250 + 2 * 250 * 20] - 48;
+                int random = m_random[(j+i*3) % 100];
+                switch (value) {
+                case 0:
+                    break;
+                case 1:
+                    m_ObOBJ[m_random[value]].draw_TriVAO_OBJ(m_Shader->GetID());
+                    break;
+                }
                 //renderer.Draw(*m_VAO, *m_IndexBuffer, *m_Shader);
                 //renderer.DrawRaw(*m_VAO, *m_Shader, 12);
             }
-        }
     }
 
     void test::TestPlayground::OnImGuiRender()
     {
         ImGui::SliderFloat3("Translation", &m_Translation.x, -50.0f, 50.0f);
-        ImGui::SliderFloat3("Rotation", &m_Rotation.x, 0.0f, 360.0f);
-        ImGui::SliderInt("DrawColumns", &m_sizeSlide, 0.0f, 1000.0f);
+        ImGui::SliderInt("Slider", &m_Slider, 0.0f, 50.0f);
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
     }

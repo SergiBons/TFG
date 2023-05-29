@@ -28,6 +28,7 @@
 #include"tests/TestPlayground.h"
 #include"tests/TestMultiDrawCalls.h"
 #include"tests/TestCamera.h"
+#include"tests/TestRainbowRoad.h"
 #include"tests/TestImported.h"
 
 
@@ -83,6 +84,7 @@ int main(void)
 
         currentTest = testMenu;
         testMenu->RegisterTest<test::TestPlayground>("Playground");
+        testMenu->RegisterTest<test::TestRainbowRoad>("RainbowRoad");
         testMenu->RegisterTest<test::TestMultiDrawCalls>("MultiDrawCalls");
         testMenu->RegisterTest<test::TestClearColor>("Clear Color");
         testMenu->RegisterTest<test::TestTexture2D>("Texture 2D");

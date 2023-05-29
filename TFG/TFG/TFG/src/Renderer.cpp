@@ -34,6 +34,7 @@ void Renderer::DrawRaw(const VertexArray& va, const Shader& shader, const int co
     GLCall(glDrawArrays(GL_TRIANGLES, 0, count));
 }
 
+
 void Renderer::Clear() const
 {
     GLCall(glClear(GL_COLOR_BUFFER_BIT));

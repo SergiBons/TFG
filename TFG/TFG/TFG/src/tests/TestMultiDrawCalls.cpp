@@ -21,7 +21,7 @@ namespace test {
         float w = 960.0f;
         float h = 540.0f;
 
-        std::string nomFitxer = "res/Models/Tile1_1/Tile1_1.obj";
+        std::string nomFitxer = "res/Models/Tile1_11/Tile1_11.obj";
         m_ObOBJ.LoadModel(const_cast<char*>(nomFitxer.c_str()));
         /*
         VertexBufferLayout layout;

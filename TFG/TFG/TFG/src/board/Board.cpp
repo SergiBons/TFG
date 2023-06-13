@@ -39,19 +39,17 @@ void Board::genBoard()
 		shapeY = 20;
 		shapeX = 20 * size;
 		char presetLayout[25][2];
-		//(char*)malloc(3 * 20 * 20 * size * sizeof(char));
 		for (int i = 0; i < 2; i++)
 			for (int j = 0; j < 25; j++)
 			{
 				presetLayout[i][j] = rand() % m_Presets.size();
 			}
-		std::cout << m_Presets.front()[100];
 
 		for (int i = 0; i < 2; i++)
 		{
 			for (int j = 0; j < 25; j++)
 			{
-				for (int PrI = 0; PrI < 3; PrI++)
+				for (int PrI = 0; PrI < 2; PrI++)
 				{
 					for (int PrJ = 0; PrJ < 10; PrJ++)
 					{
@@ -59,30 +57,30 @@ void Board::genBoard()
 						{
 							if (PrJ < 1)
 							{
-								m_BoardLayout[PrK + PrJ * (10 * 25) + PrI * (10 * 10 * 25 * 2) + j * 10 + i * 10 * (10 * 25)] = rand() % 2 + 48;
+								m_BoardLayout[PrK + PrJ * (10 * 25) + PrI * (10 * 10 * 25 * 2) + j * 10 + i * 10 * (10 * 25)] = 48;
 							}
-							else 
+							else
 							{
-								if (PrJ > 8) 
+								if (PrJ > 8)
 								{
-									m_BoardLayout[PrK + PrJ * (10 * 25) + PrI * (10 * 10 * 25 * 2) + j * 10 + i * 10 * (10 * 25)] = rand() % 2 + 48;
+									m_BoardLayout[PrK + PrJ * (10 * 25) + PrI * (10 * 10 * 25 * 2) + j * 10 + i * 10 * (10 * 25)] = 48;
 								}
 								else
 								{
 									if (PrK < 1)
 									{
-										m_BoardLayout[PrK + PrJ * (10 * 25) + PrI * (10 * 10 * 25 * 2) + j * 10 + i * 10 * (10 * 25)] = rand() % 2 + 48;
+										m_BoardLayout[PrK + PrJ * (10 * 25) + PrI * (10 * 10 * 25 * 2) + j * 10 + i * 10 * (10 * 25)] = 48;
 									}
 									else
 									{
 										if (PrK > 8)
 										{
-											m_BoardLayout[PrK + PrJ * (10 * 25) + PrI * (10 * 10 * 25 * 2) + j * 10 + i * 10 * (10 * 25)] = rand() % 2 + 48;
+											m_BoardLayout[PrK + PrJ * (10 * 25) + PrI * (10 * 10 * 25 * 2) + j * 10 + i * 10 * (10 * 25)] = 48;
 										}
 										else
 										{
 											int aux = presetLayout[i][j];
-											char check = m_Presets[aux][(PrK-2) + 8 * (PrJ-2) + 8 * 8 * PrI];
+											char check = m_Presets[aux][(PrK - 1) + 8 * (PrJ - 1) + 8 * 8 * PrI];
 											m_BoardLayout[PrK + PrJ * (10 * 25) + PrI * (10 * 10 * 25 * 2) + j * 10 + i * 10 * (10 * 25)] = m_Presets[aux][(PrK - 1) + 8 * (PrJ - 1) + 8 * 8 * PrI];
 										}
 									}
@@ -91,8 +89,59 @@ void Board::genBoard()
 						}
 					}
 				}
+				int PrI = 2;
+				for (int PrJ = 0; PrJ < 10; PrJ++)
+				{
+					for (int PrK = 0; PrK < 10; PrK++)
+					{
+						if (PrJ < 1)
+						{
+							m_BoardLayout[PrK + PrJ * (10 * 25) + PrI * (10 * 10 * 25 * 2) + j * 10 + i * 10 * (10 * 25)] = rand() % 2 + 48;
+						}
+						else
+						{
+							if (PrJ > 8)
+							{
+								m_BoardLayout[PrK + PrJ * (10 * 25) + PrI * (10 * 10 * 25 * 2) + j * 10 + i * 10 * (10 * 25)] = rand() % 2 + 48;
+							}
+							else
+							{
+								if (PrK < 1)
+								{
+									m_BoardLayout[PrK + PrJ * (10 * 25) + PrI * (10 * 10 * 25 * 2) + j * 10 + i * 10 * (10 * 25)] = rand() % 2 + 48;
+								}
+								else
+								{
+									if (PrK > 8)
+									{
+										m_BoardLayout[PrK + PrJ * (10 * 25) + PrI * (10 * 10 * 25 * 2) + j * 10 + i * 10 * (10 * 25)] = rand() % 2 + 48;
+									}
+									else
+									{
+										int aux = presetLayout[i][j];
+										char check = m_Presets[aux][(PrK - 1) + 8 * (PrJ - 1) + 8 * 8 * PrI];
+										m_BoardLayout[PrK + PrJ * (10 * 25) + PrI * (10 * 10 * 25 * 2) + j * 10 + i * 10 * (10 * 25)] = m_Presets[aux][(PrK - 1) + 8 * (PrJ - 1) + 8 * 8 * PrI];
+									}
+								}
+							}
+						}
+					}
+				}
+						
+					
+				
 			}
 		}
+
+		m_BoardLayout[0 + 19 * 250 + 2 * 250*20] = '1';
+		m_BoardLayout[0 + 18 * 250 + 2 * 250*20] = '1';
+		m_BoardLayout[0 + 17 * 250 + 2 * 250*20] = '1';
+		m_BoardLayout[1 + 19 * 250 + 2 * 250*20] = '1';
+		m_BoardLayout[1 + 18 * 250 + 2 * 250*20] = '1';
+		m_BoardLayout[1 + 17 * 250 + 2 * 250*20] = '1';
+		m_BoardLayout[2 + 19 * 250 + 2 * 250*20] = '1';
+		m_BoardLayout[2 + 18 * 250 + 2 * 250*20] = '1';
+		m_BoardLayout[2 + 17 * 250 + 2 * 250*20] = '1';
 		break;
 
 	case '1':

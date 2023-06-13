@@ -29,6 +29,7 @@
 #include"tests/TestMultiDrawCalls.h"
 #include"tests/TestCamera.h"
 #include"tests/TestRainbowRoad.h"
+#include"tests/TestBoard.h"
 #include"tests/TestImported.h"
 
 
@@ -80,10 +81,12 @@ int main(void)
         test::Test* currentTest = nullptr;
         test::TestMenu* testMenu = new test::TestMenu(currentTest);
         test::TestCamera* testCamera = new test::TestCamera(window);
+        test::TestPlayground* testPlayground = new test::TestPlayground(window);
 
 
         currentTest = testMenu;
-        testMenu->RegisterTest<test::TestPlayground>("Playground");
+        //testMenu->RegisterTest<test::TestPlayground>("Playground");
+        testMenu->RegisterTest<test::TestBoard>("Board");
         testMenu->RegisterTest<test::TestRainbowRoad>("RainbowRoad");
         testMenu->RegisterTest<test::TestMultiDrawCalls>("MultiDrawCalls");
         testMenu->RegisterTest<test::TestClearColor>("Clear Color");
@@ -108,8 +111,16 @@ int main(void)
                 currentTest->OnUpdate(0.0f);
                 currentTest->OnRender();
                 ImGui::Begin("Test");
-                if (ImGui::Button("Camera"))
+                if (currentTest != testCamera && ImGui::Button("Camera"))
+                {
                     currentTest = testCamera;
+                }
+                    
+                if (currentTest != testPlayground && ImGui::Button("Playground"))
+                {
+                    currentTest = testPlayground;
+                }
+
                 if (currentTest != testMenu && ImGui::Button("<-"))
                 {
                     

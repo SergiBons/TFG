@@ -2,7 +2,7 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
-#include "TestPlayground.h"
+#include "TestBoard.h"
 #include "Renderer.h"
 #include <string>
 
@@ -11,10 +11,10 @@
 
 namespace test {
 
-    test::TestPlayground::TestPlayground()
+    test::TestBoard::TestBoard()
         :m_Proj(glm::perspective(glm::radians(45.0f), 960.0f / 540.0f, 0.1f, 100.0f)),
         m_View(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f))),
-        m_Rotation(glm::vec3(0.0f, 0.0f, 0.0f))
+        m_Rotation(glm::vec3(0.0f, 0.0f, 0.0f)), m_Slider(0)
     {
 
 
@@ -22,7 +22,12 @@ namespace test {
         float h = 540.0f;
         for (int i = 0; i < sizeof(m_random) / 4; i++)
         {
-            m_random[i] = i % 8;
+
+            int aux = rand() % 14 +1;
+            if (aux > 8)
+                m_random[i] = 0;
+            else
+                m_random[i] = aux;
         }
 
         std::string nomFitxer = "res/Models/Tile1_11/Tile1_11.obj";
@@ -41,8 +46,12 @@ namespace test {
         m_ObOBJ[6].LoadModel(const_cast<char*>(nomFitxer.c_str()));
         nomFitxer = "res/Models/Tile1_24/Tile1_24.obj";
         m_ObOBJ[7].LoadModel(const_cast<char*>(nomFitxer.c_str()));
-        nomFitxer = "res/Models/MC/MainChar.obj";
+        nomFitxer = "res/Models/Tile1_B/Tile1_B.obj";
         m_ObOBJ[8].LoadModel(const_cast<char*>(nomFitxer.c_str()));
+        nomFitxer = "res/Models/Tile1_M/Tile1_M.obj";
+        m_ObOBJ[9].LoadModel(const_cast<char*>(nomFitxer.c_str()));
+        nomFitxer = "res/Models/MC/MainChar.obj";
+        m_ObOBJ[10].LoadModel(const_cast<char*>(nomFitxer.c_str()));
         /*
         VertexBufferLayout layout;
         layout.Push<float>(3);
@@ -162,88 +171,138 @@ namespace test {
         char a1[192] =
         {
 
-                        '1',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
 
-                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
 
-                        '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
-                        '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
-                        '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
-                        '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
-                        '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
-                        '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
-                        '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
-                        '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1'
+            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1'
 
         };
         presets.push_back(a1);
         char a2[192] = {
 
-                    '1',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0'
-                ,
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0'
+        ,
 
-                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-                    '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0'
-                ,
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0'
+        ,
 
-                    '0',  '0',  '0',  '1',  '0',  '0',  '0',  '0',
-                    '0',  '0',  '0',  '1',  '0',  '0',  '0',  '0',
-                    '0',  '0',  '0',  '1',  '0',  '0',  '0',  '0',
-                    '1',  '1',  '1',  '1',  '1',  '0',  '0',  '0',
-                    '0',  '0',  '0',  '1',  '1',  '1',  '1',  '1',
-                    '0',  '0',  '0',  '1',  '0',  '0',  '0',  '0',
-                    '0',  '0',  '0',  '1',  '0',  '0',  '0',  '0',
-                    '0',  '0',  '0',  '1',  '0',  '0',  '0',  '0'
+            '0',  '0',  '0',  '1',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '1',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '1',  '0',  '0',  '0',  '0',
+            '1',  '1',  '1',  '1',  '1',  '0',  '0',  '0',
+            '0',  '0',  '0',  '1',  '1',  '1',  '1',  '1',
+            '0',  '0',  '0',  '1',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '1',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '1',  '0',  '0',  '0',  '0'
 
         };
         presets.push_back(a2);
+        char a3[192] = {
+
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0'
+        ,
+
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0'
+        ,
+
+            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+            '1',  '0',  '0',  '0',  '0',  '0',  '0',  '1',
+            '1',  '0',  '0',  '0',  '0',  '0',  '0',  '1',
+            '1',  '0',  '0',  '1',  '1',  '0',  '0',  '1',
+            '1',  '0',  '0',  '1',  '1',  '0',  '0',  '1',
+            '1',  '0',  '0',  '0',  '0',  '0',  '0',  '1',
+            '1',  '0',  '0',  '0',  '0',  '0',  '0',  '1',
+            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1'
+
+        };
+        presets.push_back(a3);
+        char a4[192] = {
+
+        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0'
+    ,
+
+        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+        '0',  '0',  '0',  '1',  '1',  '0',  '0',  '0',
+        '0',  '0',  '0',  '1',  '1',  '0',  '0',  '0',
+        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+        '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0'
+    ,
+
+        '1',  '1',  '0',  '0',  '0',  '0',  '1',  '1',
+        '1',  '0',  '0',  '0',  '0',  '0',  '0',  '1',
+        '2',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+        '2',  '4',  '5',  '1',  '1',  '3',  '0',  '0',
+        '2',  '4',  '5',  '1',  '1',  '3',  '0',  '0',
+        '2',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+        '1',  '0',  '0',  '0',  '0',  '0',  '0',  '1',
+        '1',  '1',  '0',  '0',  '0',  '0',  '1',  '1'
+
+        };
+        presets.push_back(a4);
+
+
         m_Board = std::make_unique<Board>('0', ((char*)malloc((2 * 25 * 10) * 10 * 3 * sizeof(char))), presets);
         m_Board->genBoard(); //<3
-
-        for (int i = 0; i < 2; i++)
-        {
-            for (int j = 0; j < 25; j++)
-            {
-                for (int PrI = 0; PrI < 3; PrI++)
-                {
-                    for (int PrJ = 0; PrJ < 10; PrJ++)
-                    {
-                        for (int PrK = 0; PrK < 10; PrK++)
-                        {
-                            std::cout << m_Board->m_BoardLayout[PrK + PrJ * (10 * 25) + PrI * (10 * 10 * 25 * 2) + j * 10 + i * 10 * (10 * 25)]<< " ";
-                        }
-                        std::cout << std::endl;
-                    }
-                }
-            }
-        }
         m_Shader = std::make_unique<Shader>("res/Shaders/Phong.shader");
         m_Shader->Bind();
         GLfloat ambientg[] = { .5,.5,.5,1.0 };
@@ -256,16 +315,16 @@ namespace test {
         m_Shader->SetUniform4f("LightModelAmbient", ambientg[0], ambientg[1], ambientg[2], ambientg[3]);
     }
 
-    test::TestPlayground::~TestPlayground()
+    test::TestBoard::~TestBoard()
     {
 
     }
 
-    void test::TestPlayground::OnUpdate(float deltaTime)
+    void test::TestBoard::OnUpdate(float deltaTime)
     {
     }
 
-    void test::TestPlayground::OnRender()
+    void test::TestBoard::OnRender()
     {
         GLCall(glClearColor(0.3f, 0.3f, 0.3f, 1.0f));
         GLCall(glEnable(GL_DEPTH_TEST));
@@ -425,41 +484,81 @@ namespace test {
         glUniform1f(glGetUniformLocation(m_Shader->GetID(), "LightSource[7].spotCosCutoff"), m_Lumin[0].spotcoscutoff);
         glUniform1f(glGetUniformLocation(m_Shader->GetID(), "LightSource[7].spotExponent"), m_Lumin[0].spotexponent);
         glUniform1i(glGetUniformLocation(m_Shader->GetID(), "LightSource[7].sw_light"), m_Lumin[0].encesa);
+        float sz = 2.0f;
+        for (int k = 2; k >= 0; k--)
+            for (int i = 0; i < 20; i++)
+                for (int j = m_Slider; j < (m_Slider + 30); j++)
+                {
+                    glm::mat4 model = glm::mat4(1.0f);
+                    glm::mat4 modelU1 = glm::mat4(1.0f);
+                    glm::mat4 modelU2 = glm::mat4(1.0f);
+                    glm::mat4 normal = glm::mat4(1.0f);
+                    model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+                    model = glm::translate(model, m_Translation);
+                    model = glm::translate(model, glm::vec3(sz * j, 0, 0));
+                    model = glm::translate(model, glm::vec3(0, (2-k)*sz*3, 0));
+                    model = glm::translate(model, glm::vec3(0, 0,i*sz));
+                    normal = glm::transpose(glm::inverse(m_View * model));
 
-
-        m_Shader->Bind();
-
-        for (int i = 0; i<30; i++)
-            for (int j = 0; j < 20; j++)
-            {
-                glm::mat4 model = glm::mat4(1.0f);
-                glm::mat4 normal = glm::mat4(1.0f);
-                model = glm::translate(model, m_Translation);
-                model = glm::translate(model, glm::vec3(1.0f * i, -2.5f, 1.0f * (j-1)));
-                model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
-                normal = glm::transpose(glm::inverse(m_View * model));
-
-                m_Shader->SetUniformMat4f("normalMatrix", normal);
-                m_Shader->SetUniformMat4f("viewMatrix", m_View);
-                m_Shader->SetUniformMat4f("modelMatrix", model);
-                m_Shader->SetUniformMat4f("projectionMatrix", m_Proj); //
-                int value = (int)m_Board->m_BoardLayout[j + i * 250 + 2 * 250 * 20] - 48;
-                int random = m_random[(j+i*3) % 100];
-                switch (value) {
-                case 0:
-                    break;
-                case 1:
-                    m_ObOBJ[m_random[value]].draw_TriVAO_OBJ(m_Shader->GetID());
-                    break;
+                    m_Shader->SetUniformMat4f("normalMatrix", normal);
+                    m_Shader->SetUniformMat4f("viewMatrix", m_View);
+                    m_Shader->SetUniformMat4f("projectionMatrix", m_Proj); //
+                    int value = (int)m_Board->m_BoardLayout[j + i * 250 +  k * 250 * 20] - 48;
+                    int random = m_random[(j + i  +2/*+k*/) % 100];
+                    switch (value) {
+                    case 0:
+                        break;
+                    case 1:
+                        m_Shader->SetUniformMat4f("modelMatrix", model);
+                        m_ObOBJ[m_random[random]].draw_TriVAO_OBJ(m_Shader->GetID());
+                        break;
+                    case 2:
+                        m_Shader->SetUniformMat4f("modelMatrix", model);
+                        m_ObOBJ[m_random[random]].draw_TriVAO_OBJ(m_Shader->GetID());
+                        modelU1 = glm::translate(model, glm::vec3(0, sz, 0));
+                        m_Shader->SetUniformMat4f("modelMatrix", modelU1);
+                        m_ObOBJ[8].draw_TriVAO_OBJ(m_Shader->GetID());
+                        modelU2 = glm::translate(model, glm::vec3(0, 2*sz, 0));
+                        m_Shader->SetUniformMat4f("modelMatrix", modelU2);
+                        m_ObOBJ[8].draw_TriVAO_OBJ(m_Shader->GetID());
+                        break;
+                    case 3:
+                        m_Shader->SetUniformMat4f("modelMatrix", model);
+                        m_ObOBJ[m_random[random]].draw_TriVAO_OBJ(m_Shader->GetID());
+                        modelU1 = glm::translate(model, glm::vec3(0, sz, 0));
+                        m_Shader->SetUniformMat4f("modelMatrix", modelU1);
+                        m_ObOBJ[9].draw_TriVAO_OBJ(m_Shader->GetID());
+                        break;
+                    case 4:
+                        m_Shader->SetUniformMat4f("modelMatrix", model);
+                        m_ObOBJ[m_random[random]].draw_TriVAO_OBJ(m_Shader->GetID());
+                        modelU1 = glm::translate(model, glm::vec3(0, sz, 0));
+                        m_Shader->SetUniformMat4f("modelMatrix", modelU1);
+                        m_ObOBJ[m_random[(random+1)%100]].draw_TriVAO_OBJ(m_Shader->GetID());
+                        break;
+                    case 5:
+                        m_Shader->SetUniformMat4f("modelMatrix", model);
+                        m_ObOBJ[m_random[random]].draw_TriVAO_OBJ(m_Shader->GetID());
+                        modelU2 = glm::translate(model, glm::vec3(0, 2*sz, 0));
+                        m_Shader->SetUniformMat4f("modelMatrix", modelU2);
+                        m_ObOBJ[m_random[(random + 1) % 100]].draw_TriVAO_OBJ(m_Shader->GetID());
+                        break;
+                    case 6:
+                        m_Shader->SetUniformMat4f("modelMatrix", model);
+                        m_Board->m_BoardLayout[j + i * 250 + 2/*floor*/ * 250 * 20] = 1;
+                            //call enemy creation
+                        m_ObOBJ[m_random[random]].draw_TriVAO_OBJ(m_Shader->GetID());
+                        break;
+                    }
+                    //renderer.Draw(*m_VAO, *m_IndexBuffer, *m_Shader);
+                    //renderer.DrawRaw(*m_VAO, *m_Shader, 12);
                 }
-                //renderer.Draw(*m_VAO, *m_IndexBuffer, *m_Shader);
-                //renderer.DrawRaw(*m_VAO, *m_Shader, 12);
-            }
     }
 
-    void test::TestPlayground::OnImGuiRender()
+    void test::TestBoard::OnImGuiRender()
     {
         ImGui::SliderFloat3("Translation", &m_Translation.x, -50.0f, 50.0f);
+        ImGui::SliderInt("Slider", &m_Slider, 0.0f, 50.0f);
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
     }

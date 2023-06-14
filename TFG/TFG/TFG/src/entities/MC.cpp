@@ -41,50 +41,56 @@ void MC::Attack()
 bool MC::Move(int dir)
 {
 	float adjust = 3.333333333333f;
-	switch (dir)
-	{
-	case 0:
-		m_CenterPos.z -= 0.075f;
-		m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.0f, -0.075f *adjust));
-		return true;
-		break;
-	case 1:
-		m_CenterPos.x -= 0.075f;
-		m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(-0.075f * adjust, 0.0f, 0.0f));
-		return true;
-		break;
-	case 2:
-		m_CenterPos.z += 0.075f;
-		m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.0f, 0.075f * adjust));
-		return true;
-		break;
-	case 3:
-		m_CenterPos.x += 0.075f;
-		m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.075f * adjust, 0.0f, 0.0f));
-		return true;
-		break;
+	if (m_stagger <= 5) {
+		switch (dir)
+		{
+		case 0:
+			m_CenterPos.z -= 0.075f;
+			m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.0f, -0.075f * adjust));
+			return true;
+			break;
+		case 1:
+			m_CenterPos.x -= 0.075f;
+			m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(-0.075f * adjust, 0.0f, 0.0f));
+			return true;
+			break;
+		case 2:
+			m_CenterPos.z += 0.075f;
+			m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.0f, 0.075f * adjust));
+			return true;
+			break;
+		case 3:
+			m_CenterPos.x += 0.075f;
+			m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.075f * adjust, 0.0f, 0.0f));
+			return true;
+			break;
 
+		}
 	}
 	return false;
+}
+
+void MC::Read(Texture tex, Renderer rend, Shader shad)
+{
+
 }
 
 void MC::Jump(int state)
 {
 	if (m_stagger == 0 && m_floored)
 	{ 
-		m_stagger++;
 		m_jCounter = 1;
 	}
 }
 
-void MC::UpdateStates(char* board)
+void MC::UpdateStates(char* board, glm::mat4 &view)
 {
 	int FloorCorrectedX, FloorCorrectedY, FloorCorrectedZ;
 	FloorCorrectedX = round(m_CenterPos.x);
 	FloorCorrectedZ = round(m_CenterPos.z);
-	if (m_CenterPos.y < 7)
+	if (m_CenterPos.y < 20)
 	{
-		if (m_CenterPos.y < 4)
+		if (m_CenterPos.y < 10)
 			FloorCorrectedY = 0;
 		else
 			FloorCorrectedY = 1;
@@ -101,39 +107,39 @@ void MC::UpdateStates(char* board)
 	{
 
 	case 1:
-		if (round(m_CenterPos.y) == 1 + 6 * FloorCorrectedY)
+		if (round(m_CenterPos.y) == 1 + 10* FloorCorrectedY)
 			m_floored = true;
 		else
 			m_floored = false;
 		break;
 	case 2:
-		if (round(m_CenterPos.y) == 5 + 6 * FloorCorrectedY)
+		if (round(m_CenterPos.y) == 4 + 10 * FloorCorrectedY)
 			m_floored = true;
 		else
 			m_floored = false;
 		break;
 		break;
 	case 3:
-		if (round(m_CenterPos.y) == 3 + 6 * FloorCorrectedY)
+		if (round(m_CenterPos.y) == 4 + 10 * FloorCorrectedY)
 			m_floored = true;
 		else
 			m_floored = false;
 		break;
 
 	case 4:
-		if (round(m_CenterPos.y) == 3 + 6 * FloorCorrectedY)
+		if (round(m_CenterPos.y) == 4 + 10 * FloorCorrectedY)
 			m_floored = true;
 		else
 			m_floored = false;
 		break;
 	case 5:
-		if (round(m_CenterPos.y) == 5 + 6 * FloorCorrectedY)
+		if (round(m_CenterPos.y) == 7 + 10 * FloorCorrectedY)
 			m_floored = true;
 		else
 			m_floored = false;
 		break;
 	case 6:
-		if (round(m_CenterPos.y) == 3 + 6 * FloorCorrectedY)
+		if (round(m_CenterPos.y) == 4 + 10 * FloorCorrectedY)
 			m_floored = true;
 		else
 			m_floored = false;
@@ -148,41 +154,36 @@ void MC::UpdateStates(char* board)
 	{
 	case 1:
 		m_checker = m_CenterPos.y;
-		m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.6f, 0.0f));
-		m_CenterPos.y += 0.6f;
+		m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.4f, 0.0f));
+		view = glm::translate(view, glm::vec3(0.0f, -0.12f, 0.0f));
+		m_CenterPos.y += 0.4f;
 		m_jCounter = 2;
 		break;
 	case 2:
 		m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.4f, 0.0f));
+		view = glm::translate(view, glm::vec3(0.0f, -0.12f, 0.0f));
 		m_CenterPos.y += 0.4f;
 		if (floor(m_CenterPos.y) == m_checker + 2)
 			m_jCounter = 3;
 		break;
 	case 3:
 		m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.2f, 0.0f));
+		view = glm::translate(view, glm::vec3(0.0f, -0.06f, 0.0f));
 		m_CenterPos.y += 0.2f;
-		if (floor(m_CenterPos.y) == m_checker + 3)
-			m_jCounter = 4;
-		break;
-	case 4:
-		m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.1f, 0.0f));
-		m_CenterPos.y += 0.1f;
 		if (floor(m_CenterPos.y) == m_checker + 4)
-			m_jCounter = 5;
+			m_jCounter = 0;
 		break;
-	case 5:
-		m_stagger--; 
-		m_jCounter = 0;
 	default:
 		if (m_floored == false)
 		{
-			m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, -0.1f, 0.0f));
-			m_CenterPos.y -= 0.1f;
+			m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, -0.2f, 0.0f));
+			view = glm::translate(view, glm::vec3(0.0f, 0.06f, 0.0f));
+			m_CenterPos.y -= 0.2f;
 		}
 		break;
 	}
 	
-
-
+	if (m_stagger >0)
+		m_stagger -= 1;
 }
 

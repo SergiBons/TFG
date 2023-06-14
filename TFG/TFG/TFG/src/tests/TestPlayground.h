@@ -22,6 +22,7 @@ namespace test {
 	private:
 		int m_sizeSlide;
 		int m_random[100];
+		int m_ReadCheck = 0;
 		LLUM m_Lumin[8];
 		int m_Slider;
 		glm::vec3 m_Rotation;
@@ -33,10 +34,11 @@ namespace test {
 		std::unique_ptr<Shader> m_Shader;
 		std::unique_ptr<Texture> m_Texture;
 		std::unique_ptr<VertexBuffer> m_VertexBuffer;
-		COBJModel m_ObOBJ[11];
+		COBJModel m_ObOBJ[12];
 		MC m_MainChar;
 		glm::mat4 m_Proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
 		glm::mat4 m_View = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+		glm::mat4 m_View2 = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
 		GLFWwindow* m_Window;
 	};
 

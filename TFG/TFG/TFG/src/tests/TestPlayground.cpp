@@ -34,8 +34,9 @@ namespace test {
             else
                 m_random[i] = aux;
         }
-
+        m_Texture = std::make_unique<Texture>("res/textures/Testure.png");
         std::string nomFitxer = "res/Models/Tile1_11/Tile1_11.obj";
+
         m_ObOBJ[0].LoadModel(const_cast<char*>(nomFitxer.c_str()));
         nomFitxer = "res/Models/Tile1_12/Tile1_12.obj";
         m_ObOBJ[1].LoadModel(const_cast<char*>(nomFitxer.c_str()));
@@ -57,6 +58,8 @@ namespace test {
         m_ObOBJ[9].LoadModel(const_cast<char*>(nomFitxer.c_str()));
         nomFitxer = "res/Models/Tile1_R/Readable.obj";
         m_ObOBJ[10].LoadModel(const_cast<char*>(nomFitxer.c_str()));
+        nomFitxer = "res/Models/ReadableText/ReadableText.obj";
+        m_ObOBJ[11].LoadModel(const_cast<char*>(nomFitxer.c_str()));
         /*
         VertexBufferLayout layout;
         layout.Push<float>(3);
@@ -65,6 +68,9 @@ namespace test {
         m_VAO1->AddBuffer(*m_VertexBuffer1, layout);
         */
         //m_IndexBuffer = std::make_unique<IndexBuffer>(indices, 12);
+
+
+
         GLCall(glEnable(GL_BLEND));
 
         GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
@@ -287,7 +293,7 @@ namespace test {
         '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
         '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
         '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-        '0',  '0',  '0',  '1',  '1',  '0',  '0',  '0',
+        '0',  '0',  '0',  '1',  '6',  '0',  '0',  '0',
         '0',  '0',  '0',  '1',  '1',  '0',  '0',  '0',
         '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
         '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
@@ -333,10 +339,10 @@ namespace test {
 
     void test::TestPlayground::OnRender()
     {
-        GLCall(glClearColor(0.3f, 0.3f, 0.3f, 1.0f));
+        m_Shader->Bind();
+        GLCall(glClearColor(0.4f, 0.4f, 0.8f, 1.0f));
         GLCall(glEnable(GL_DEPTH_TEST));
         GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-
         Renderer renderer;
         GLdouble angv, angh;
         GLfloat position[] = { 0.0,0.0,200.0,1.0 };
@@ -540,10 +546,17 @@ namespace test {
         {
             m_MainChar.Jump(m_MainChar.m_CenterPos.y);
         }
+        
+
+
+        
         float sz = 2.0f;
 
+
+
+
         //UpdateMC
-        m_MainChar.UpdateStates(m_Board->m_BoardLayout);
+        m_MainChar.UpdateStates(m_Board->m_BoardLayout, m_View);
         m_Shader->SetUniformMat4f("modelMatrix", m_MainChar.m_ModelMatrix);
         glm::mat4 normalMC = glm::mat4(1.0f);
         normalMC = glm::transpose(glm::inverse(m_View * m_MainChar.m_ModelMatrix));
@@ -552,8 +565,6 @@ namespace test {
         m_Shader->SetUniformMat4f("viewMatrix", m_View);
         m_Shader->SetUniformMat4f("projectionMatrix", m_Proj); //
         m_MainChar.DrawMC(m_Shader->GetID());
-
-
 
         for (int  y = 0;  y < 3; y++)
             for (int z= 0; z< 20; z++)
@@ -571,8 +582,7 @@ namespace test {
                     model = glm::translate(model, glm::vec3(0, 0, z* sz));
                     normal = glm::transpose(glm::inverse(m_View * model));
                     m_Shader->SetUniformMat4f("normalMatrix", normal);
-                    m_Shader->SetUniformMat4f("viewMatrix", m_View);
-                    m_Shader->SetUniformMat4f("projectionMatrix", m_Proj); //
+                    
                     int value = (int)m_Board->m_BoardLayout[x + z* 250 +  y * 250 * 20] - 48;
                     int random = m_random[(x + z+ y) % 100];
                     switch (value) {
@@ -619,9 +629,11 @@ namespace test {
                     case 6:
                         m_Shader->SetUniformMat4f("modelMatrix", model);
                         m_ObOBJ[m_random[random]].draw_TriVAO_OBJ(m_Shader->GetID());
-                        modelU1 = glm::translate(model, glm::vec3(0, sz, 0));
+                        modelU1 = glm::translate(model, glm::vec3(1, sz, -1));
+                        modelU1 = glm::rotate(modelU1, glm::radians(90.0f), glm::vec3(0, 1.0f, 0));
                         m_Shader->SetUniformMat4f("modelMatrix", modelU1);
-                        m_ObOBJ[m_random[10]].draw_TriVAO_OBJ(m_Shader->GetID());
+                        m_ObOBJ[10].draw_TriVAO_OBJ(m_Shader->GetID());
+                        break;
                     case 7:
                         m_Shader->SetUniformMat4f("modelMatrix", model);
                         m_Board->m_BoardLayout[x + z* 250 + y * 250 * 20] = 1;
@@ -632,6 +644,80 @@ namespace test {
                     //renderer.Draw(*m_VAO, *m_IndexBuffer, *m_Shader);
                     //renderer.DrawRaw(*m_VAO, *m_Shader, 12);
                 }
+        
+        int stateE = glfwGetKey(m_Window, GLFW_KEY_E);
+        if (stateE == GLFW_PRESS)
+        {
+            if (m_MainChar.m_stagger <= 10 && m_ReadCheck == 0)
+            {
+                m_ReadCheck = 1;
+                m_View2 = m_View;
+                m_MainChar.m_stagger += 20;
+            }
+            m_MainChar.m_stagger += 1;
+        }
+        if (m_ReadCheck == 2 && m_MainChar.m_stagger <= 5)
+        {
+            m_ReadCheck = 1;
+        }
+        if (m_ReadCheck == 1 && m_MainChar.m_stagger <= 5)
+        {
+            m_ReadCheck = 0;
+            m_View = m_View2;
+        }
+        if (m_ReadCheck == 1)
+        {
+            m_ReadCheck = 2;
+            glm::mat4 auxGUI = glm::translate(m_MainChar.m_ModelMatrix, glm::vec3(0.0f, 8.0f, -3.0f));
+            auxGUI = glm::rotate(auxGUI, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+            m_View = glm::translate(m_View2, glm::vec3(0.0f, -2.0f, 1.0f));
+            m_Shader->SetUniformMat4f("modelMatrix", auxGUI);
+            m_ObOBJ[11].draw_TriVAO_OBJ(m_Shader->GetID());
+        }
+        if (m_ReadCheck == 2)
+        {
+            glm::mat4 auxGUI = glm::translate(m_MainChar.m_ModelMatrix, glm::vec3(0.0f, 8.0f, -3.0f));
+            auxGUI = glm::rotate(auxGUI, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+            auxGUI = glm::scale(auxGUI, glm::vec3(5.0f, 5.0f, 0.0f));
+            m_View = glm::translate(m_View2, glm::vec3(0.0f, -4.0f, 0.0f));
+
+            m_Shader->SetUniformMat4f("modelMatrix", auxGUI);
+            m_ObOBJ[11].draw_TriVAO_OBJ(m_Shader->GetID());
+        }
+        int stateR = glfwGetKey(m_Window, GLFW_KEY_R);
+        if (stateR == GLFW_PRESS)
+        {
+            glm::mat4 auxGUI = glm::translate(m_MainChar.m_ModelMatrix, glm::vec3(-1.0f, 3.0f, -0.25f));
+           auxGUI = glm::scale(auxGUI, glm::vec3(0.5f, 0.5f, 0.5f));
+            m_Shader->SetUniformMat4f("modelMatrix", auxGUI);
+            m_ObOBJ[3].draw_TriVAO_OBJ(m_Shader->GetID());
+            auxGUI = glm::translate(auxGUI, glm::vec3(2.0f, 0.0f, 0.0f));
+            m_Shader->SetUniformMat4f("modelMatrix", auxGUI);
+            m_ObOBJ[3].draw_TriVAO_OBJ(m_Shader->GetID());
+            auxGUI = glm::translate(auxGUI, glm::vec3(2.0f, 0.0f, 0.0f));
+            m_Shader->SetUniformMat4f("modelMatrix", auxGUI);
+            m_ObOBJ[3].draw_TriVAO_OBJ(m_Shader->GetID());
+        }
+        int stateT = glfwGetKey(m_Window, GLFW_KEY_T);
+        if (stateT == GLFW_PRESS)
+        {
+            glm::mat4 auxGUI = glm::translate(m_MainChar.m_ModelMatrix, glm::vec3(-1.0f, 3.0f, -0.25f));
+            auxGUI = glm::scale(auxGUI, glm::vec3(0.5f, 0.5f, 0.5f));
+            m_Shader->SetUniformMat4f("modelMatrix", auxGUI);
+            m_ObOBJ[2].draw_TriVAO_OBJ(m_Shader->GetID());
+            auxGUI = glm::translate(auxGUI, glm::vec3(2.0f, 0.0f, 0.0f));
+            m_Shader->SetUniformMat4f("modelMatrix", auxGUI);
+            m_ObOBJ[2].draw_TriVAO_OBJ(m_Shader->GetID());
+        }
+        int stateY = glfwGetKey(m_Window, GLFW_KEY_Y);
+        if (stateY == GLFW_PRESS)
+        {
+            glm::mat4 auxGUI = glm::translate(m_MainChar.m_ModelMatrix, glm::vec3(-1.0f, 3.0f, -0.25f));
+            auxGUI = glm::scale(auxGUI, glm::vec3(0.5f, 0.5f, 0.5f));
+            m_Shader->SetUniformMat4f("modelMatrix", auxGUI);
+            m_ObOBJ[1].draw_TriVAO_OBJ(m_Shader->GetID());
+        }
+
     }
 
     void test::TestPlayground::OnImGuiRender()

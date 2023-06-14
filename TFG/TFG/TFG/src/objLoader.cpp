@@ -1204,7 +1204,7 @@ void _stdcall COBJModel::UseMaterial_ShaderID(GLuint sh_programID, Material pMat
 		{
 			glEnable(GL_TEXTURE_2D);
 			glBindTexture(GL_TEXTURE_2D, pMaterial.iTextureID);
-			glUniform1i(glGetUniformLocation(sh_programID, "u_Texture1"), GLint(0));
+			glUniform1i(glGetUniformLocation(sh_programID, "texture0"), GLint(0));
 			//glUniform1i(glGetUniformLocation(sh_programID, "texture0"), pMaterial.iTextureID);
 
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

@@ -33,9 +33,10 @@ public:
 	void DrawMC(unsigned int shaderID);
 	void Attack();
 	bool Move(int dir);
+	void Read(Texture tex, Renderer rend, Shader shad);
 	void Look();
 	void Jump(int state);
-	void UpdateStates(char* board);
+	void UpdateStates(char* board, glm::mat4& view);
 
 
 

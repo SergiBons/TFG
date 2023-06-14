@@ -61,21 +61,11 @@ int main(void)
 
     {
        
-        Renderer renderer;
 
         ImGui::CreateContext();
         ImGui_ImplGlfwGL3_Init(window, true);
         ImGui::StyleColorsDark();
-        /*
-        glm::vec3 translationA(200, 200, 0);
-        glm::vec3 translationB(400, 200, 0);
 
-        bool show_demo_window = true;
-        bool show_another_window = false;
-        ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-        float r = 0.0f;
-        float inc = 0.05f;
-        */
         /* Loop until the user closes the window */
 
         test::Test* currentTest = nullptr;
@@ -103,7 +93,6 @@ int main(void)
         {
             /* Render here */
             GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
-            renderer.Clear();
 
             ImGui_ImplGlfwGL3_NewFrame();
             if (currentTest)

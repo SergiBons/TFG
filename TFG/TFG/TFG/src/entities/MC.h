@@ -12,10 +12,13 @@ class MC
 {
 private:
 	COBJModel m_ObOBJ;
+	COBJModel m_hpModel[3];
 	int m_jCounter;
 	int m_checker;
-	int m_surrounds[4];
-
+	int m_surrounds[8];
+	int m_interact;
+	glm::vec3 m_lastCommonBlock;
+	int m_invulnerability;
 
 
 
@@ -33,9 +36,11 @@ public:
 	void DrawMC(unsigned int shaderID);
 	void Attack();
 	bool Move(int dir);
-	void Read(Texture tex, Renderer rend, Shader shad);
+	bool Read(unsigned int shaderID);
 	void Look();
-	void Jump(int state);
+	void Jump();
+	void HealthDisplay();
+	void ReDamage(int DamageType, glm::mat4& view);
 	void UpdateStates(char* board, glm::mat4& view);
 
 

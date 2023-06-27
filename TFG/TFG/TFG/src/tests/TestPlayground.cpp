@@ -193,17 +193,17 @@ namespace test {
 
             '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
             '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '1',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '1',  '0',  '0',
             '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '1',  '0',  '0',
             '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
             '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
 
             '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
             '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
             '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
-            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+            '1',  '1',  '1',  '4',  '5',  '1',  '1',  '1',
             '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
             '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
             '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
@@ -211,6 +211,7 @@ namespace test {
 
         };
         presets.push_back(a1);
+        /*
         char a2[192] = {
 
             '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
@@ -243,8 +244,9 @@ namespace test {
             '0',  '0',  '0',  '1',  '0',  '0',  '0',  '0'
 
         };
-
+        
         presets.push_back(a2);
+        
         char a3[192] = {
 
             '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
@@ -278,6 +280,7 @@ namespace test {
 
         };
         presets.push_back(a3);
+        */
         char a4[192] = {
 
         '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
@@ -544,7 +547,7 @@ namespace test {
         int state_ = glfwGetKey(m_Window, GLFW_KEY_SPACE);
         if (state_ == GLFW_PRESS)
         {
-            m_MainChar.Jump(m_MainChar.m_CenterPos.y);
+            m_MainChar.Jump();
         }
         
 
@@ -613,6 +616,7 @@ namespace test {
                         m_ObOBJ[9].draw_TriVAO_OBJ(m_Shader->GetID());
                         break;
                     case 4:
+                        //+1
                         m_Shader->SetUniformMat4f("modelMatrix", model);
                         m_ObOBJ[m_random[random]].draw_TriVAO_OBJ(m_Shader->GetID());
                         modelU1 = glm::translate(model, glm::vec3(0, sz, 0));
@@ -620,6 +624,7 @@ namespace test {
                         m_ObOBJ[m_random[(random + 1) % 100]].draw_TriVAO_OBJ(m_Shader->GetID());
                         break;
                     case 5:
+                        //+2
                         m_Shader->SetUniformMat4f("modelMatrix", model);
                         m_ObOBJ[m_random[random]].draw_TriVAO_OBJ(m_Shader->GetID());
                         modelU2 = glm::translate(model, glm::vec3(0, 2 * sz, 0));
@@ -627,6 +632,7 @@ namespace test {
                         m_ObOBJ[m_random[(random + 1) % 100]].draw_TriVAO_OBJ(m_Shader->GetID());
                         break;
                     case 6:
+                        //Readable
                         m_Shader->SetUniformMat4f("modelMatrix", model);
                         m_ObOBJ[m_random[random]].draw_TriVAO_OBJ(m_Shader->GetID());
                         modelU1 = glm::translate(model, glm::vec3(1, sz, -1));
@@ -688,7 +694,7 @@ namespace test {
         if (stateR == GLFW_PRESS)
         {
             glm::mat4 auxGUI = glm::translate(m_MainChar.m_ModelMatrix, glm::vec3(-1.0f, 3.0f, -0.25f));
-           auxGUI = glm::scale(auxGUI, glm::vec3(0.5f, 0.5f, 0.5f));
+            auxGUI = glm::scale(auxGUI, glm::vec3(0.5f, 0.5f, 0.5f));
             m_Shader->SetUniformMat4f("modelMatrix", auxGUI);
             m_ObOBJ[3].draw_TriVAO_OBJ(m_Shader->GetID());
             auxGUI = glm::translate(auxGUI, glm::vec3(2.0f, 0.0f, 0.0f));

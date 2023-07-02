@@ -21,7 +21,7 @@ Texture::Texture(const std::string& path)
         // load image, create texture and generate mipmaps
         int width, height, nrChannels;
         stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
-        unsigned char* data = stbi_load("res/textures/testure.png", &m_Width, &m_Height, &m_BPP, 4);
+        unsigned char* data = stbi_load(path.c_str(), &m_Width, &m_Height, &m_BPP, 4);
         if (data)
         {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_Width, m_Height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -39,6 +39,7 @@ Texture::Texture(const std::string& path)
         stbi_set_flip_vertically_on_load(1);
         m_LocalBuffer = stbi_load(path.c_str(), &m_Width, &m_Height, &m_BPP, 4);
 
+        GLCall(glEnable(GL_TEXTURE_2D));
         GLCall(glGenTextures(1, &m_RendererID));
         GLCall(glBindTexture(GL_TEXTURE_2D, m_RendererID));
 

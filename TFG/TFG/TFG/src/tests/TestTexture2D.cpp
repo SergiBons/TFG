@@ -43,7 +43,7 @@ namespace test {
         m_VAO->AddBuffer(*m_VertexBuffer, layout);
         m_IndexBuffer = std::make_unique<IndexBuffer>(indices, 6);
 
-        m_Shader = std::make_unique<Shader>("res/Shaders/Basic.shader");
+        m_Shader = std::make_unique<Shader>("res/Shaders/Phong.shader");
         m_Shader->Bind();
         m_Shader->SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
 
@@ -63,7 +63,7 @@ namespace test {
 
 	void TestTexture2D::OnRender()
 	{
-		GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
+		GLCall(glClearColor(0.2f, 0.2f, 0.2f, 1.0f));
         GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
         Renderer renderer;

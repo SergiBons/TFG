@@ -3,11 +3,20 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include <iostream>
 
+
+float TimeSet = -1.0f;
+
 MC::MC()
 {
 	m_CenterPos = glm::vec3(0.0f, 0.0f, 0.0f);
-	std::string nomFitxer = "res/Models/MC/MainChar.obj";
-	m_ObOBJ.LoadModel(const_cast<char*>(nomFitxer.c_str()));
+	std::string nomFitxer = "res/Models/MC/MainCharB.obj";
+	m_ObOBJ[0].LoadModel(const_cast<char*>(nomFitxer.c_str()));
+	nomFitxer = "res/Models/MC/MainCharA.obj";
+	m_ObOBJ[1].LoadModel(const_cast<char*>(nomFitxer.c_str()));
+	nomFitxer = "res/Models/MC/MainCharLR.obj";
+	m_ObOBJ[2].LoadModel(const_cast<char*>(nomFitxer.c_str()));
+	nomFitxer = "res/Models/MC/MainCharLL.obj";
+	m_ObOBJ[3].LoadModel(const_cast<char*>(nomFitxer.c_str()));
 	nomFitxer = "res/Models/Tile1_14/Tile1_14.obj";
 	m_hpModel[0].LoadModel(const_cast<char*>(nomFitxer.c_str()));
 	nomFitxer = "res/Models/Tile1_13/Tile1_13.obj";
@@ -24,6 +33,9 @@ MC::MC()
 	m_interact = 0;
 	m_invulnerability = 0;
 	m_lastCommonBlock = glm::vec3(0);
+	m_shad = nullptr;
+	m_Rotation = glm::mat4(1.0f);
+	m_attackRange = -1;
 	for (int i = 0; i < 8; i++)
 		m_surrounds[i] = 0;
 }
@@ -32,18 +44,57 @@ MC::~MC()
 {
 }
 
-void MC::DrawMC(unsigned int shaderID)
+
+
+void MC::DrawMCB(unsigned int shaderID)
 {
-	m_ObOBJ.draw_TriVAO_OBJ(shaderID);
+	m_ObOBJ[0].draw_TriVAO_OBJ(shaderID);
 }
 
-void MC::Attack()
+void MC::DrawMCA(unsigned int shaderID)
 {
-	if (m_stagger == 0)
-		m_stagger++;
+	m_ObOBJ[1].draw_TriVAO_OBJ(shaderID);
 }
 
-bool MC::Move(int dir)
+void MC::DrawMCLR(unsigned int shaderID)
+{
+	m_ObOBJ[2].draw_TriVAO_OBJ(shaderID);
+}
+
+void MC::DrawMCLL(unsigned int shaderID)
+{
+	m_ObOBJ[3].draw_TriVAO_OBJ(shaderID);
+}
+
+
+void MC::Attack(std::unique_ptr<Shader>& shad, float accTime)
+{
+	float decim = accTime - (int)accTime;
+	if (TimeSet < 0.0f)
+	{
+		TimeSet = accTime;
+		glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
+		glm::mat4 matArms = glm::rotate(glm::mat4(1.0f), -glm::radians(90.0f * decim*12), rotationAxis);
+		shad->SetUniformMat4f("modelMatrix", m_ModelMatrix *  m_Rotation * matArms);
+		DrawMCA(shad->GetID());
+		m_attackRange = 5;
+		m_stagger = 1;
+	}
+	else
+	{
+		glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
+		glm::mat4 matArms = glm::rotate(glm::mat4(1.0f), -glm::radians(90 * decim * 12), rotationAxis);
+		shad->SetUniformMat4f("modelMatrix", m_ModelMatrix * m_Rotation * matArms);
+		DrawMCA(shad->GetID());
+		if (accTime > TimeSet + 1)
+		{
+			TimeSet = -1.0f;
+		}
+	}
+
+}
+
+bool MC::Move(int dir, float deltaTime)
 {
 	float adjust = 3.333333333333f;
 	float decim = 0.1f;
@@ -81,7 +132,8 @@ bool MC::Move(int dir)
 			hVal[3] = 3;
 	}
 
-	if (m_stagger <= 5) {
+	if (m_stagger <= 0) {
+		float value = 4.0f;
 		switch (dir)
 		{
 		case 0:
@@ -90,15 +142,15 @@ bool MC::Move(int dir)
 			{
 				if(hVal[0] <= m_CenterPos.y)
 				{
-					m_CenterPos.z -= 0.075f;
-					m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.0f, -0.075f * adjust));
+					m_CenterPos.z -= value*deltaTime;
+					m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.0f, -value * adjust * deltaTime));
 					return true;
 				}
 			}
 			else
 			{
-				m_CenterPos.z -= 0.075f;
-				m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.0f, -0.075f * adjust));
+				m_CenterPos.z -= value * deltaTime;
+				m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.0f, -value * adjust * deltaTime));
 				return true;
 			}
 			break;
@@ -109,15 +161,15 @@ bool MC::Move(int dir)
 			{
 				if (hVal[3] <= m_CenterPos.y)
 				{
-					m_CenterPos.x -= 0.075f;
-					m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(-0.075f * adjust, 0.0f, 0.0f));
+					m_CenterPos.x -= value * deltaTime;
+					m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(-value * adjust * deltaTime, 0.0f, 0.0f));
 					return true;
 				}
 			}
 			else
 			{
-				m_CenterPos.x -= 0.075f;
-				m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(-0.075f * adjust, 0.0f, 0.0f));
+				m_CenterPos.x -= value * deltaTime;
+				m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(-value * adjust * deltaTime, 0.0f, 0.0f));
 				return true;
 			}
 			break;
@@ -127,15 +179,15 @@ bool MC::Move(int dir)
 			{
 				if (hVal[2] <= m_CenterPos.y)
 				{
-					m_CenterPos.z += 0.075f;
-					m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.0f, 0.075f * adjust));
+					m_CenterPos.z += value * deltaTime;
+					m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.0f, value * adjust * deltaTime));
 					return true;
 				}
 			}
 			else
 			{
-				m_CenterPos.z += 0.075f;
-				m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.0f, 0.075f * adjust));
+				m_CenterPos.z += value * deltaTime;
+				m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.0f, value * adjust * deltaTime));
 				return true;
 			}
 			break;
@@ -145,15 +197,15 @@ bool MC::Move(int dir)
 			{
 				if (hVal[1] <= m_CenterPos.y)
 				{
-					m_CenterPos.x += 0.075f;
-					m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.075f * adjust, 0.0f, 0.0f));
+					m_CenterPos.x += value * deltaTime;
+					m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(value * adjust * deltaTime, 0.0f, 0.0f));
 					return true;
 				}
 			}
 			else
 			{
-				m_CenterPos.x += 0.075f;
-				m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.075f * adjust, 0.0f, 0.0f));
+				m_CenterPos.x += value * deltaTime;
+				m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(value * adjust * deltaTime, 0.0f, 0.0f));
 				return true;
 			}
 			break;
@@ -169,7 +221,7 @@ bool MC::Read(unsigned int shaderID)
 		return true;
 	else
 	{
-		HealthDisplay();
+		//HealthDisplay();
 		return false;
 	}
 
@@ -177,164 +229,180 @@ bool MC::Read(unsigned int shaderID)
 
 void MC::Jump()
 {
-	if (m_stagger == 0 && m_floored)
+	if (m_stagger <= 0 && m_floored)
 	{ 
 		m_jCounter = 1;
 	}
 }
 
-void MC::HealthDisplay()
+void MC::HealthDisplay(std::unique_ptr<Shader>& shad)
 {
-	int shaderID = 0;
-	switch (m_hp)
+	glm::mat4 auxGUI = glm::translate(m_ModelMatrix, glm::vec3(-1.0f, 3.0f, -0.25f));
+	if (m_invulnerability > 0)
 	{
-	case 1:
-		glm::mat4 auxGUI = glm::translate(m_ModelMatrix, glm::vec3(-1.0f, 3.0f, -0.25f));
-		auxGUI = glm::scale(auxGUI, glm::vec3(0.5f, 0.5f, 0.5f));
-		//m_Shader->SetUniformMat4f("modelMatrix", auxGUI);
-		m_hpModel[3].draw_TriVAO_OBJ(shaderID);
-		auxGUI = glm::translate(auxGUI, glm::vec3(2.0f, 0.0f, 0.0f));
-		//m_Shader->SetUniformMat4f("modelMatrix", auxGUI);
-		m_hpModel[3].draw_TriVAO_OBJ(shaderID);
-		auxGUI = glm::translate(auxGUI, glm::vec3(2.0f, 0.0f, 0.0f));
-		//m_Shader->SetUniformMat4f("modelMatrix", auxGUI);
-		m_hpModel[3].draw_TriVAO_OBJ(shaderID);
-		break;
-	case 2:
-
-		break;
-	default:
-
-		break;
+		switch (m_hp)
+		{
+		case 1:
+			auxGUI = glm::translate(m_ModelMatrix, glm::vec3(-1.0f, 3.0f, -0.25f));
+			auxGUI = glm::scale(auxGUI, glm::vec3(0.5f, 0.5f, 0.5f));
+			shad->SetUniformMat4f("modelMatrix", auxGUI);
+			m_hpModel[2].draw_TriVAO_OBJ(shad->GetID());
+			break;
+		case 2:
+			auxGUI = glm::translate(m_ModelMatrix, glm::vec3(-1.0f, 3.0f, -0.25f));
+			auxGUI = glm::scale(auxGUI, glm::vec3(0.5f, 0.5f, 0.5f));
+			shad->SetUniformMat4f("modelMatrix", auxGUI);
+			m_hpModel[1].draw_TriVAO_OBJ(shad->GetID());
+			auxGUI = glm::translate(auxGUI, glm::vec3(2.0f, 0.0f, 0.0f));
+			shad->SetUniformMat4f("modelMatrix", auxGUI);
+			m_hpModel[1].draw_TriVAO_OBJ(shad->GetID());
+			break;
+		case 3:
+			auxGUI = glm::translate(m_ModelMatrix, glm::vec3(-1.0f, 3.0f, -0.25f));
+			auxGUI = glm::scale(auxGUI, glm::vec3(0.5f, 0.5f, 0.5f));
+			shad->SetUniformMat4f("modelMatrix", auxGUI);
+			m_hpModel[0].draw_TriVAO_OBJ(shad->GetID());
+			auxGUI = glm::translate(auxGUI, glm::vec3(2.0f, 0.0f, 0.0f));
+			shad->SetUniformMat4f("modelMatrix", auxGUI);
+			m_hpModel[0].draw_TriVAO_OBJ(shad->GetID());
+			auxGUI = glm::translate(auxGUI, glm::vec3(2.0f, 0.0f, 0.0f));
+			shad->SetUniformMat4f("modelMatrix", auxGUI);
+			m_hpModel[0].draw_TriVAO_OBJ(shad->GetID());
+			break;
+		default:
+			auxGUI = glm::translate(m_ModelMatrix, glm::vec3(-1.0f, 3.0f, -0.25f));
+			auxGUI = glm::scale(auxGUI, glm::vec3(0.5f, 0.5f, 0.5f));
+			shad->SetUniformMat4f("modelMatrix", auxGUI);
+			m_hpModel[2].draw_TriVAO_OBJ(shad->GetID());
+			break;
+		}
 	}
 }
+
 
 void MC::ReDamage(int DamageType, glm::mat4 &view)
 {
-	switch (DamageType) 
+	if (m_invulnerability <= 0)
 	{
-	case 1:
-		m_hp -= 1;
-		m_ModelMatrix = glm::mat4(1.0f);
-		m_ModelMatrix = glm::translate(m_ModelMatrix, (m_lastCommonBlock + glm::vec3(0.2f, 1.0f, -0.5f)));
-		m_ModelMatrix = glm::scale(m_ModelMatrix, glm::vec3(0.30f, 0.30f, 0.30f));
-		m_invulnerability = 100;
-		view = glm::rotate(glm::mat4(1.0f), glm::radians(60.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		view = glm::translate(view, glm::vec3(-m_lastCommonBlock.x-1, -7, -m_lastCommonBlock.z-4));
-		m_CenterPos = m_lastCommonBlock;
-		HealthDisplay();
-		break;
-
-
-
+		switch (DamageType)
+		{
+		case 1:
+			//map Fall
+			m_hp -= 1;
+			m_ModelMatrix = glm::mat4(1.0f);
+			m_ModelMatrix = glm::translate(m_ModelMatrix, (m_lastCommonBlock + glm::vec3(0.2f, 1.0f, -0.5f)));
+			m_ModelMatrix = glm::scale(m_ModelMatrix, glm::vec3(0.30f, 0.30f, 0.30f));
+			m_invulnerability = 3;
+			view = glm::rotate(glm::mat4(1.0f), glm::radians(60.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+			view = glm::translate(view, glm::vec3(-m_lastCommonBlock.x - 1, -7, -m_lastCommonBlock.z - 4));
+			m_CenterPos = m_lastCommonBlock;
+			break;
+		case 2:
+			//enemy damage
+			m_hp -= 1;
+			m_invulnerability = 3;
+			m_stagger = 1;
+			break;
+		}
 	}
+
 }
 
-void MC::UpdateStates(char* board, glm::mat4 &view)
+void MC::UpdateStates(char* board, glm::mat4& view, glm::vec3 MousePos, int sW, int sH, int dmg, float deltaTime)
 {
-	int FloorCorrectedX, FloorCorrectedY, FloorCorrectedZ;
-	FloorCorrectedX = round(m_CenterPos.x);
-	FloorCorrectedZ = round(m_CenterPos.z);
-	if (m_CenterPos.y < 7)
-	{
-		if (m_CenterPos.y < 4)
-			FloorCorrectedY = 0;
-		else
-			FloorCorrectedY = 1;
-	}
-	else
-		FloorCorrectedY = 2;
+	if (dmg != 0)
+		ReDamage(dmg, view);
+	AimToCursor(MousePos, view, sW, sH, deltaTime);
+	const int boardWidth = 250;
+	const int boardHeight = 20;
+	const int boardSize = boardWidth * boardHeight;
 
-	int floorValue = (int)board[FloorCorrectedX + FloorCorrectedZ * 250 + (2 - FloorCorrectedY) * 250 * 20] - 48;
-	//std::cout << floorValue;
-	//SurroundCheck
+	int floorCorrectedX = static_cast<int>(round(m_CenterPos.x));
+	int floorCorrectedZ = static_cast<int>(round(m_CenterPos.z));
+	int floorCorrectedY = (m_CenterPos.y < 7) ? ((m_CenterPos.y < 4) ? 0 : 1) : 2;
+
+	int floorValue = static_cast<int>(board[floorCorrectedX + floorCorrectedZ * boardWidth + (2 - floorCorrectedY) * boardSize]) - '0';
+
+	// SurroundCheck
 	/*
 	0	1	2
 	3		4
 	5	6	7
 	*/
-		m_surrounds[0] = (int)board[FloorCorrectedX + (FloorCorrectedZ-1) * 250 + (2 - FloorCorrectedY) * 250 * 20] - 48;
-		m_surrounds[1] = (int)board[FloorCorrectedX+1 + (FloorCorrectedZ) * 250 + (2 - FloorCorrectedY) * 250 * 20] - 48;
-		m_surrounds[2] = (int)board[FloorCorrectedX + (FloorCorrectedZ +1) * 250 + (2 - FloorCorrectedY) * 250 * 20] - 48;
-		m_surrounds[3] = (int)board[FloorCorrectedX-1 + (FloorCorrectedZ) * 250 + (2 - FloorCorrectedY) * 250 * 20] - 48;
-		if (FloorCorrectedY < 2)
-		{
-			m_surrounds[4] = (int)board[FloorCorrectedX + (FloorCorrectedZ - 1) * 250 + (2 - 1) * 250 * 20] - 48;
-			m_surrounds[5] = (int)board[FloorCorrectedX + 1 + (FloorCorrectedZ) * 250 + (2 - 1) * 250 * 20] - 48;
-			m_surrounds[6] = (int)board[FloorCorrectedX + (FloorCorrectedZ + 1) * 250 + (2 - 1) * 250 * 20] - 48;
-			m_surrounds[7] = (int)board[FloorCorrectedX - 1 + (FloorCorrectedZ) * 250 + (2 - 1) * 250 * 20] - 48;
-		}
+	int offset = (2 - floorCorrectedY) * boardSize;
+	m_surrounds[0] = static_cast<int>(board[floorCorrectedX + (floorCorrectedZ - 1) * boardWidth + offset]) - '0';
+	m_surrounds[1] = static_cast<int>(board[floorCorrectedX + 1 + floorCorrectedZ * boardWidth + offset]) - '0';
+	m_surrounds[2] = static_cast<int>(board[floorCorrectedX + (floorCorrectedZ + 1) * boardWidth + offset]) - '0';
+	m_surrounds[3] = static_cast<int>(board[floorCorrectedX - 1 + floorCorrectedZ * boardWidth + offset]) - '0';
+
+	if (floorCorrectedY < 2)
+	{
+		offset = (2 - 1) * boardSize;
+		m_surrounds[4] = static_cast<int>(board[floorCorrectedX + (floorCorrectedZ - 1) * boardWidth + offset]) - '0';
+		m_surrounds[5] = static_cast<int>(board[floorCorrectedX + 1 + floorCorrectedZ * boardWidth + offset]) - '0';
+		m_surrounds[6] = static_cast<int>(board[floorCorrectedX + (floorCorrectedZ + 1) * boardWidth + offset]) - '0';
+		m_surrounds[7] = static_cast<int>(board[floorCorrectedX - 1 + floorCorrectedZ * boardWidth + offset]) - '0';
+	}
 
 	switch (floorValue)
 	{
 	case 1:
-		if (m_CenterPos.y < 1.10 + 3 * FloorCorrectedY)
+		if (m_CenterPos.y < 1.10 + 3 * floorCorrectedY)
 		{
 			m_floored = true;
-			m_lastCommonBlock = glm::vec3(FloorCorrectedX, 1, FloorCorrectedZ);
+			m_lastCommonBlock = glm::vec3(floorCorrectedX, 1, floorCorrectedZ);
 		}
 		else
 			m_floored = false;
 		break;
 	case 2:
-		if (m_CenterPos.y < 3.10 + 3* FloorCorrectedY)
-				m_floored = true;
-		else
-			m_floored = false;
+		m_floored = (m_CenterPos.y < 3.10 + 3 * floorCorrectedY);
 		break;
 	case 3:
-		if (m_CenterPos.y < 2.10 + 3 * FloorCorrectedY)
-				m_floored = true;
-		else
-			m_floored = false;
+		m_floored = (m_CenterPos.y < 2.10 + 3 * floorCorrectedY);
 		break;
-
 	case 4:
-		if (m_CenterPos.y < 2.10 + 3 * FloorCorrectedY)
-				m_floored = true;
-		else
-			m_floored = false;
+		m_floored = (m_CenterPos.y < 2.10 + 3 * floorCorrectedY);
 		break;
 	case 5:
-		if (m_CenterPos.y < 3.10 + 3 * FloorCorrectedY)
-				m_floored = true;
+		m_floored = (m_CenterPos.y < 3.10 + 3 * floorCorrectedY);
 		break;
 	case 6:
-		if (m_CenterPos.y < 2.10 + 3 * FloorCorrectedY)
-				m_floored = true;
+		m_floored = (m_CenterPos.y < 2.10 + 3 * floorCorrectedY);
 		break;
 	default:
 		m_floored = false;
 		break;
 	}
-	
-	float jumpForce = 0.75;
+
+	float jumpForce = 40.0f * deltaTime;
 	float scaleAdjust = 0.3f;
+
 	switch (m_jCounter)
 	{
 	case 1:
 		m_checker = m_CenterPos.y;
-		m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.4f* jumpForce, 0.0f));
-		view = glm::translate(view, glm::vec3(0.0f, -0.4f*scaleAdjust * jumpForce, 0.0f));
-		m_CenterPos.y += 0.4f * scaleAdjust *jumpForce;
+		m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.4f * jumpForce, 0.0f));
+		view = glm::translate(view, glm::vec3(0.0f, -0.4f * scaleAdjust * jumpForce, 0.0f));
+		m_CenterPos.y += 0.4f * scaleAdjust * jumpForce;
 		m_jCounter = 2;
 		break;
 	case 2:
-		m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.4f* jumpForce*1.5, 0.0f));
-		view = glm::translate(view, glm::vec3(0.0f, -0.4f*scaleAdjust * jumpForce*1.5, 0.0f));
-		m_CenterPos.y += 0.4f * scaleAdjust * jumpForce*1.5;
+		m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.6f * jumpForce, 0.0f));
+		view = glm::translate(view, glm::vec3(0.0f, -0.6f * scaleAdjust * jumpForce, 0.0f));
+		m_CenterPos.y += 0.6f * scaleAdjust * jumpForce;
 		if (m_CenterPos.y >= m_checker + 1)
 			m_jCounter = 3;
 		break;
 	case 3:
-		m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.2f* jumpForce, 0.0f));
-		view = glm::translate(view, glm::vec3(0.0f, -0.2f* scaleAdjust * jumpForce, 0.0f));
+		m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.2f * jumpForce, 0.0f));
+		view = glm::translate(view, glm::vec3(0.0f, -0.2f * scaleAdjust * jumpForce, 0.0f));
 		m_CenterPos.y += 0.2f * scaleAdjust * jumpForce;
 		if (m_CenterPos.y >= m_checker + 1.5)
 			m_jCounter = 0;
 		break;
 	default:
-		if (m_floored == false)
+		if (!m_floored)
 		{
 			if (m_CenterPos.y >= m_checker + 1)
 			{
@@ -346,37 +414,62 @@ void MC::UpdateStates(char* board, glm::mat4 &view)
 			{
 				if (m_CenterPos.y <= m_checker - 0.5)
 				{
-					m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, -0.4f * jumpForce * 2, 0.0f));
-					view = glm::translate(view, glm::vec3(0.0f, 0.4f * scaleAdjust * jumpForce * 2, 0.0f));
-					m_CenterPos.y -= 0.4f * scaleAdjust * jumpForce * 2;
+					m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, -0.8f * jumpForce, 0.0f));
+					view = glm::translate(view, glm::vec3(0.0f, 0.8f * scaleAdjust * jumpForce, 0.0f));
+					m_CenterPos.y -= 0.8f * scaleAdjust * jumpForce;
 				}
 				else
 				{
-					m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, -0.4f * jumpForce * 1.25, 0.0f));
-					view = glm::translate(view, glm::vec3(0.0f, 0.4f * scaleAdjust * jumpForce * 1.25, 0.0f));
-					m_CenterPos.y -= 0.4f * scaleAdjust * jumpForce * 1.25;
+					m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, -0.5f * jumpForce, 0.0f));
+					view = glm::translate(view, glm::vec3(0.0f, 0.5f * scaleAdjust * jumpForce, 0.0f));
+					m_CenterPos.y -= 0.5f * scaleAdjust * jumpForce;
 				}
 			}
 		}
 		else
 		{
-			if (m_CenterPos.y < 1+3*FloorCorrectedY)
+			if (m_CenterPos.y < 1 + 3 * floorCorrectedY)
 			{
 				m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.1f, 0.0f));
-				view = glm::translate(view, glm::vec3(0.0f, -0.1f * scaleAdjust, 0.0f));
-				m_CenterPos.y += 0.1f * scaleAdjust;
+				view = glm::translate(view, glm::vec3(0.0f, -0.1f * scaleAdjust * deltaTime, 0.0f));
+				m_CenterPos.y += 0.1f * scaleAdjust * deltaTime;
 			}
 		}
 		break;
 	}
+
 	if (m_CenterPos.y < -2)
 	{
-		m_stagger += 100;
+		m_stagger == 2;
 		ReDamage(1, view);
-
+		m_invulnerability += 3;
 	}
-
-	if (m_stagger >0)
-		m_stagger -= 1;
+	if (m_invulnerability > 0)
+		m_invulnerability -= 1*deltaTime;
+	if (m_stagger > 0)
+		m_stagger -= 1*deltaTime;
 }
 
+void MC::AimToCursor(glm::vec3 MousePos, glm::mat4& view, int sW, int sH, float deltaTime)
+{
+	if (m_stagger <=0)
+	{ 
+		/*
+		glm::vec3 Translation = glm::vec3(m_ModelMatrix[3][0], m_ModelMatrix[3][1], m_ModelMatrix[3][2]);
+		glm::mat4 Proj = glm::perspective(1.0f, 960.0f / 540.0f, 0.1f, 100.0f);
+
+
+		// Extract the translation factors
+		glm::vec3 translation = glm::vec3(m_ModelMatrix[3]);
+
+		// Extract the scale factors
+		glm::vec3 scale;
+		scale.x = glm::length(glm::vec3(m_ModelMatrix[0]));
+		scale.y = glm::length(glm::vec3(m_ModelMatrix[1]));
+		scale.z = glm::length(glm::vec3(m_ModelMatrix[2]));
+		*/
+		// Apply rotation around the Y-axis
+		glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
+		m_Rotation = glm::rotate(glm::mat4(1.0f), -std::atan2(MousePos.y -sH/3, MousePos.x - sW*5/12), rotationAxis);
+		}
+}

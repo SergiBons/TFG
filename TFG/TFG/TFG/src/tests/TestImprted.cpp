@@ -20,7 +20,7 @@ namespace test {
         float w = 960.0f;
         float h = 540.0f;
 
-        std::string nomFitxer = "res/Models/Tile1_R/Readable.obj";
+        std::string nomFitxer = "res/Models/Enemy/Enemy1.obj";
         m_ObOBJ.LoadModel(const_cast<char*>(nomFitxer.c_str()));
         /*
         VertexBufferLayout layout;

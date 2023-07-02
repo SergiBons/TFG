@@ -47,7 +47,7 @@ void Board::genBoard()
 
 		for (int i = 0; i < 2; i++)
 		{
-			for (int j = 0; j < 25; j++)
+			for (int j = 0; j < 21; j++)
 			{
 				for (int PrI = 0; PrI < 2; PrI++)
 				{

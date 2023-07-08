@@ -4,8 +4,8 @@
 #include <iostream>
 
 
-float TimeSet = -1.0f;
-
+int TimeSet = -1;
+float AnimationCycle = 0;
 MC::MC()
 {
 	m_CenterPos = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -27,6 +27,7 @@ MC::MC()
 	m_ModelMatrix = glm::mat4(1.0f);
 	m_hp = 3;
 	m_jCounter = 0;
+	m_AccTime = 0;
 	m_stagger = 0;
 	m_checker = -1;
 	m_floored = true;
@@ -35,7 +36,7 @@ MC::MC()
 	m_lastCommonBlock = glm::vec3(0);
 	m_shad = nullptr;
 	m_Rotation = glm::mat4(1.0f);
-	m_attackRange = -1;
+	m_attackRange = 0;
 	for (int i = 0; i < 8; i++)
 		m_surrounds[i] = 0;
 }
@@ -67,30 +68,69 @@ void MC::DrawMCLL(unsigned int shaderID)
 }
 
 
-void MC::Attack(std::unique_ptr<Shader>& shad, float accTime)
+void MC::Attack(std::unique_ptr<Shader>& shad, float accTime, char* board)
 {
-	float decim = accTime - (int)accTime;
-	if (TimeSet < 0.0f)
+	
+	if (TimeSet == -1.0f)
 	{
-		TimeSet = accTime;
-		glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
-		glm::mat4 matArms = glm::rotate(glm::mat4(1.0f), -glm::radians(90.0f * decim*12), rotationAxis);
-		shad->SetUniformMat4f("modelMatrix", m_ModelMatrix *  m_Rotation * matArms);
-		DrawMCA(shad->GetID());
-		m_attackRange = 5;
-		m_stagger = 1;
+		TimeSet = 1;
+		m_AccTime = 0.0f;
 	}
-	else
-	{
-		glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
-		glm::mat4 matArms = glm::rotate(glm::mat4(1.0f), -glm::radians(90 * decim * 12), rotationAxis);
-		shad->SetUniformMat4f("modelMatrix", m_ModelMatrix * m_Rotation * matArms);
-		DrawMCA(shad->GetID());
-		if (accTime > TimeSet + 1)
-		{
-			TimeSet = -1.0f;
-		}
+		const int boardWidth = 250;
+	const int boardHeight = 20;
+	const int boardSize = boardWidth * boardHeight;
+	int floorCorrectedX = static_cast<int>(round(m_CenterPos.x));
+	int floorCorrectedZ = static_cast<int>(round(m_CenterPos.z));
+	int floorCorrectedY = (m_CenterPos.y < 7) ? ((m_CenterPos.y < 4) ? 0 : 1) : 2;
+
+
+	if (m_surrounds[0] == 2) {
+		board[floorCorrectedX + (floorCorrectedZ-1) * boardWidth + (2 - floorCorrectedY) * boardSize] = '1';
 	}
+	if (m_surrounds[1] == 2) {
+		board[(floorCorrectedX + 1) + floorCorrectedZ * boardWidth + (2 - floorCorrectedY) * boardSize] = '1';
+	}
+	if (m_surrounds[2] == 2) {
+		board[floorCorrectedX + (floorCorrectedZ+1) * boardWidth + (2 - floorCorrectedY) * boardSize] = '1';
+	}
+	if (m_surrounds[3] == 2) {
+		board[(floorCorrectedX - 1) + floorCorrectedZ * boardWidth + (2 - floorCorrectedY) * boardSize] = '1';
+	}
+	if (m_surrounds[0] == 3) {
+		board[floorCorrectedX + (floorCorrectedZ - 1) * boardWidth + (2 - floorCorrectedY) * boardSize] = '1';
+		if (board[floorCorrectedX + (floorCorrectedZ - 2) * boardWidth + (2 - floorCorrectedY) * boardSize] == '0')
+			board[floorCorrectedX + (floorCorrectedZ - 2) * boardWidth + (2 - floorCorrectedY) * boardSize] = '8';
+		else
+			if (board[floorCorrectedX + (floorCorrectedZ - 2) * boardWidth + (2 - floorCorrectedY) * boardSize] == '1')
+				board[floorCorrectedX + (floorCorrectedZ - 2) * boardWidth + (2 - floorCorrectedY) * boardSize] = '3';
+	}
+	if (m_surrounds[1] == 3) {
+		board[(floorCorrectedX + 1) + floorCorrectedZ * boardWidth + (2 - floorCorrectedY) * boardSize] = '1';
+		if (board[(floorCorrectedX + 2) + floorCorrectedZ * boardWidth + (2 - floorCorrectedY) * boardSize] == '0')
+			board[(floorCorrectedX + 2) + floorCorrectedZ * boardWidth + (2 - floorCorrectedY) * boardSize] = '8';
+		else
+			if (board[(floorCorrectedX + 2) + floorCorrectedZ * boardWidth + (2 - floorCorrectedY) * boardSize] == '1')
+				board[(floorCorrectedX + 2) + floorCorrectedZ * boardWidth + (2 - floorCorrectedY) * boardSize] = '3';
+	}
+	if (m_surrounds[2] == 3) {
+		board[floorCorrectedX + (floorCorrectedZ + 1) * boardWidth + (2 - floorCorrectedY) * boardSize] = '1';
+		if (board[floorCorrectedX + (floorCorrectedZ + 2) * boardWidth + (2 - floorCorrectedY) * boardSize] == '0')
+			board[floorCorrectedX + (floorCorrectedZ + 2) * boardWidth + (2 - floorCorrectedY) * boardSize] = '8';
+		else
+			if (board[floorCorrectedX + (floorCorrectedZ + 2) * boardWidth + (2 - floorCorrectedY) * boardSize] == '1')
+				board[floorCorrectedX + (floorCorrectedZ + 2) * boardWidth + (2 - floorCorrectedY) * boardSize] = '3';
+	}
+	if (m_surrounds[3] == 3) {
+		board[(floorCorrectedX - 1) + floorCorrectedZ * boardWidth + (2 - floorCorrectedY) * boardSize] = '1';
+		if (board[(floorCorrectedX - 2) + floorCorrectedZ * boardWidth + (2 - floorCorrectedY) * boardSize] == '0')
+			board[(floorCorrectedX - 2) + floorCorrectedZ * boardWidth + (2 - floorCorrectedY) * boardSize] = '8';
+		else
+			if (board[(floorCorrectedX - 2) + floorCorrectedZ * boardWidth + (2 - floorCorrectedY) * boardSize] == '1')
+				board[(floorCorrectedX - 2) + floorCorrectedZ * boardWidth + (2 - floorCorrectedY) * boardSize] = '3';
+	}
+
+
+
 
 }
 
@@ -133,7 +173,15 @@ bool MC::Move(int dir, float deltaTime)
 	}
 
 	if (m_stagger <= 0) {
+		float auxCycle = AnimationCycle;
+		if (AnimationCycle > 2)
+				auxCycle = 2-AnimationCycle;
 		float value = 4.0f;
+		float animationSpeed = 0.05f;
+		float rotationAngle = 0; // Angle in radians
+		glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_ModelMatrix[3][0], m_ModelMatrix[3][1], m_ModelMatrix[3][2]));
+		glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(rotationAngle), glm::vec3(0.0f, 0.0f, 1.0f));
+		glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f/3));
 		switch (dir)
 		{
 		case 0:
@@ -144,6 +192,10 @@ bool MC::Move(int dir, float deltaTime)
 				{
 					m_CenterPos.z -= value*deltaTime;
 					m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.0f, -value * adjust * deltaTime));
+					translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_ModelMatrix[3][0], m_ModelMatrix[3][1], m_ModelMatrix[3][2] + auxCycle * animationSpeed));
+					m_LLM = translationMatrix * rotationMatrix * scaleMatrix;
+					translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_ModelMatrix[3][0], m_ModelMatrix[3][1], m_ModelMatrix[3][2] - auxCycle * animationSpeed));
+					m_LRM = translationMatrix * rotationMatrix * scaleMatrix;
 					return true;
 				}
 			}
@@ -151,6 +203,10 @@ bool MC::Move(int dir, float deltaTime)
 			{
 				m_CenterPos.z -= value * deltaTime;
 				m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.0f, -value * adjust * deltaTime));
+				translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_ModelMatrix[3][0], m_ModelMatrix[3][1], m_ModelMatrix[3][2] + auxCycle * animationSpeed));
+				m_LLM = translationMatrix * rotationMatrix * scaleMatrix;
+				translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_ModelMatrix[3][0], m_ModelMatrix[3][1], m_ModelMatrix[3][2] - auxCycle * animationSpeed));
+				m_LRM = translationMatrix * rotationMatrix * scaleMatrix;
 				return true;
 			}
 			break;
@@ -163,6 +219,10 @@ bool MC::Move(int dir, float deltaTime)
 				{
 					m_CenterPos.x -= value * deltaTime;
 					m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(-value * adjust * deltaTime, 0.0f, 0.0f));
+					translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_ModelMatrix[3][0] + auxCycle * animationSpeed, m_ModelMatrix[3][1], m_ModelMatrix[3][2] ));
+					m_LLM = translationMatrix * rotationMatrix * scaleMatrix;
+					translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_ModelMatrix[3][0] - auxCycle * animationSpeed, m_ModelMatrix[3][1], m_ModelMatrix[3][2] ));
+					m_LRM = translationMatrix * rotationMatrix * scaleMatrix;
 					return true;
 				}
 			}
@@ -170,6 +230,10 @@ bool MC::Move(int dir, float deltaTime)
 			{
 				m_CenterPos.x -= value * deltaTime;
 				m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(-value * adjust * deltaTime, 0.0f, 0.0f));
+				translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_ModelMatrix[3][0] + auxCycle * animationSpeed, m_ModelMatrix[3][1], m_ModelMatrix[3][2]));
+				m_LLM = translationMatrix * rotationMatrix * scaleMatrix;
+				translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_ModelMatrix[3][0] - auxCycle * animationSpeed, m_ModelMatrix[3][1], m_ModelMatrix[3][2]));
+				m_LRM = translationMatrix * rotationMatrix * scaleMatrix;
 				return true;
 			}
 			break;
@@ -181,6 +245,10 @@ bool MC::Move(int dir, float deltaTime)
 				{
 					m_CenterPos.z += value * deltaTime;
 					m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.0f, value * adjust * deltaTime));
+					translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_ModelMatrix[3][0], m_ModelMatrix[3][1], m_ModelMatrix[3][2] + auxCycle * animationSpeed));
+					m_LLM = translationMatrix * rotationMatrix * scaleMatrix;
+					translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_ModelMatrix[3][0], m_ModelMatrix[3][1], m_ModelMatrix[3][2] - auxCycle * animationSpeed));
+					m_LRM = translationMatrix * rotationMatrix * scaleMatrix;
 					return true;
 				}
 			}
@@ -188,6 +256,10 @@ bool MC::Move(int dir, float deltaTime)
 			{
 				m_CenterPos.z += value * deltaTime;
 				m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.0f, value * adjust * deltaTime));
+				translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_ModelMatrix[3][0], m_ModelMatrix[3][1], m_ModelMatrix[3][2] + auxCycle * animationSpeed));
+				m_LLM = translationMatrix * rotationMatrix * scaleMatrix;
+				translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_ModelMatrix[3][0], m_ModelMatrix[3][1], m_ModelMatrix[3][2] - auxCycle * animationSpeed));
+				m_LRM = translationMatrix * rotationMatrix * scaleMatrix;
 				return true;
 			}
 			break;
@@ -199,6 +271,10 @@ bool MC::Move(int dir, float deltaTime)
 				{
 					m_CenterPos.x += value * deltaTime;
 					m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(value * adjust * deltaTime, 0.0f, 0.0f));
+					translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_ModelMatrix[3][0] + auxCycle * animationSpeed, m_ModelMatrix[3][1], m_ModelMatrix[3][2]));
+					m_LLM = translationMatrix * rotationMatrix * scaleMatrix;
+					translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_ModelMatrix[3][0] - auxCycle * animationSpeed, m_ModelMatrix[3][1], m_ModelMatrix[3][2]));
+					m_LRM = translationMatrix * rotationMatrix * scaleMatrix;
 					return true;
 				}
 			}
@@ -206,6 +282,10 @@ bool MC::Move(int dir, float deltaTime)
 			{
 				m_CenterPos.x += value * deltaTime;
 				m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(value * adjust * deltaTime, 0.0f, 0.0f));
+				translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_ModelMatrix[3][0] + auxCycle * animationSpeed, m_ModelMatrix[3][1], m_ModelMatrix[3][2]));
+				m_LLM = translationMatrix * rotationMatrix * scaleMatrix;
+				translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_ModelMatrix[3][0] - auxCycle * animationSpeed, m_ModelMatrix[3][1], m_ModelMatrix[3][2]));
+				m_LRM = translationMatrix * rotationMatrix * scaleMatrix;
 				return true;
 			}
 			break;
@@ -292,7 +372,8 @@ void MC::ReDamage(int DamageType, glm::mat4 &view)
 			m_ModelMatrix = glm::mat4(1.0f);
 			m_ModelMatrix = glm::translate(m_ModelMatrix, (m_lastCommonBlock + glm::vec3(0.2f, 1.0f, -0.5f)));
 			m_ModelMatrix = glm::scale(m_ModelMatrix, glm::vec3(0.30f, 0.30f, 0.30f));
-			m_invulnerability = 3;
+			m_invulnerability = 2;
+			m_stagger = 1.5;
 			view = glm::rotate(glm::mat4(1.0f), glm::radians(60.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 			view = glm::translate(view, glm::vec3(-m_lastCommonBlock.x - 1, -7, -m_lastCommonBlock.z - 4));
 			m_CenterPos = m_lastCommonBlock;
@@ -310,9 +391,8 @@ void MC::ReDamage(int DamageType, glm::mat4 &view)
 
 void MC::UpdateStates(char* board, glm::mat4& view, glm::vec3 MousePos, int sW, int sH, int dmg, float deltaTime)
 {
-	if (dmg != 0)
-		ReDamage(dmg, view);
-	AimToCursor(MousePos, view, sW, sH, deltaTime);
+	AnimationCycle += deltaTime*10;
+	m_attackRange = 0;
 	const int boardWidth = 250;
 	const int boardHeight = 20;
 	const int boardSize = boardWidth * boardHeight;
@@ -347,6 +427,15 @@ void MC::UpdateStates(char* board, glm::mat4& view, glm::vec3 MousePos, int sW, 
 	switch (floorValue)
 	{
 	case 1:
+		if (m_CenterPos.y < 1.10 + 3 * floorCorrectedY)
+		{
+			m_floored = true;
+			m_lastCommonBlock = glm::vec3(floorCorrectedX, 1, floorCorrectedZ);
+		}
+		else
+			m_floored = false;
+		break;
+	case 8:
 		if (m_CenterPos.y < 1.10 + 3 * floorCorrectedY)
 		{
 			m_floored = true;
@@ -430,13 +519,29 @@ void MC::UpdateStates(char* board, glm::mat4& view, glm::vec3 MousePos, int sW, 
 		{
 			if (m_CenterPos.y < 1 + 3 * floorCorrectedY)
 			{
-				m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 0.1f, 0.0f));
-				view = glm::translate(view, glm::vec3(0.0f, -0.1f * scaleAdjust * deltaTime, 0.0f));
-				m_CenterPos.y += 0.1f * scaleAdjust * deltaTime;
+				m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(0.0f, 5.0f*deltaTime, 0.0f));
+				view = glm::translate(view, glm::vec3(0.0f, -5.0f * scaleAdjust * deltaTime, 0.0f));
+				m_CenterPos.y += 5.0f * scaleAdjust * deltaTime;
 			}
 		}
 		break;
 	}
+
+	if (TimeSet != -1)
+	{
+		m_AccTime += deltaTime;
+		m_attackRange = 2;
+		m_stagger = 0.4;
+	}
+	if (m_AccTime > 0.25)
+	{
+		TimeSet = -1.0f;
+	}
+	if (dmg != 0)
+		ReDamage(dmg, view);
+	AimToCursor(MousePos, view, sW, sH);
+
+
 
 	if (m_CenterPos.y < -2)
 	{
@@ -448,9 +553,12 @@ void MC::UpdateStates(char* board, glm::mat4& view, glm::vec3 MousePos, int sW, 
 		m_invulnerability -= 1*deltaTime;
 	if (m_stagger > 0)
 		m_stagger -= 1*deltaTime;
+	m_AccTime += deltaTime;
+	if (AnimationCycle >= 4)
+		AnimationCycle = 0;
 }
 
-void MC::AimToCursor(glm::vec3 MousePos, glm::mat4& view, int sW, int sH, float deltaTime)
+void MC::AimToCursor(glm::vec3 MousePos, glm::mat4& view, int sW, int sH)
 {
 	if (m_stagger <=0)
 	{ 

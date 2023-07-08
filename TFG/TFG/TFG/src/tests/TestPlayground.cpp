@@ -1,6 +1,10 @@
 #include "imgui/imgui.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+#include <fstream>
+
+#include <iostream>
+#include <filesystem>
 
 
 #include "TestPlayground.h"
@@ -15,6 +19,9 @@ namespace test {
     glm::vec3 mousePosition;
     bool mouseClick = false;
     double acumulatedTime = 0.0f;
+    double timeStamp = -1.0f;
+    int soundSelect = 0;
+    float blendProgress = 0.0f;
     void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
         if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
             // Left mouse button was clicked
@@ -32,12 +39,14 @@ namespace test {
         mousePosition.y = static_cast<float>(ypos);
     }
 
-    test::TestPlayground::TestPlayground(GLFWwindow* window)
+    test::TestPlayground::TestPlayground(GLFWwindow* window, sf::Sound* sound, sf::Sound* sound2)
         :m_Proj(glm::perspective(1.0f, 960.0f / 540.0f, 0.1f, 100.0f)),
         m_View(glm::rotate(glm::mat4(1.0f), glm::radians(60.0f), glm::vec3(1.0f, 0.0f, 0.0f))),
-        m_Rotation(glm::vec3(0.0f, 0.0f, 0.0f)), m_Slider(0), m_Window(window),
+        m_Rotation(glm::vec3(0.0f, 0.0f, 0.0f)), m_Slider(0), m_Window(window), m_sound(sound),
+        m_sound2(sound2),
         m_damage(0)
     {
+        m_sound->setVolume(100.0f);
         int screenWidth, screenHeight;
         glfwGetFramebufferSize(window, &screenWidth, &screenHeight);
         m_View = glm::translate(m_View, glm::vec3(-2.0f , -7.0f ,-22.0f ));
@@ -251,7 +260,7 @@ namespace test {
 
             '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
             '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
-            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+            '1',  '1',  '1',  '1',  '4',  '1',  '1',  '1',
             '1',  '1',  '1',  '1',  '7',  '1',  '1',  '1',
             '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
             '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
@@ -260,7 +269,7 @@ namespace test {
 
         };
         presets.push_back(a1);
-
+        /*
         char a2[192] = {
 
             '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
@@ -295,7 +304,6 @@ namespace test {
         };
         
         presets.push_back(a2);
-        
         char a3[192] = {
 
             '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
@@ -329,7 +337,7 @@ namespace test {
 
         };
         presets.push_back(a3);
-
+        */
         char a4[192] = {
 
         '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
@@ -352,17 +360,81 @@ namespace test {
         '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0'
     ,
 
-        '1',  '1',  '0',  '0',  '0',  '0',  '1',  '1',
-        '1',  '0',  '0',  '0',  '0',  '0',  '0',  '1',
-        '2',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-        '2',  '4',  '5',  '1',  '1',  '3',  '0',  '0',
-        '2',  '4',  '5',  '1',  '1',  '3',  '0',  '0',
-        '2',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
-        '1',  '0',  '0',  '0',  '0',  '0',  '0',  '1',
-        '1',  '1',  '0',  '0',  '0',  '0',  '1',  '1'
+        '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+        '1',  '0',  '0',  '0',  '1',  '1',  '0',  '1',
+        '2',  '0',  '0',  '0',  '1',  '1',  '0',  '0',
+        '2',  '4',  '5',  '1',  '1',  '3',  '1',  '0',
+        '2',  '4',  '5',  '1',  '1',  '3',  '1',  '0',
+        '2',  '0',  '0',  '0',  '1',  '1',  '0',  '0',
+        '1',  '0',  '0',  '0',  '1',  '1',  '0',  '1',
+        '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1'
 
         };
         presets.push_back(a4);
+        char a5[192] =
+        {
+
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+
+            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1'
+
+        };
+        presets.push_back(a5);
+        char a6[192] =
+        {
+
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+            '0',  '0',  '0',  '0',  '0',  '0',  '0',  '0',
+
+            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1',
+            '1',  '1',  '1',  '1',  '1',  '1',  '1',  '1'
+
+        };
+        presets.push_back(a6);
 
         m_Board = std::make_unique<Board>('0', ((char*)malloc((2 * 25 * 10) * 10 * 3 * sizeof(char))), presets);
         m_Board->genBoard(); //<3
@@ -388,6 +460,7 @@ namespace test {
 
     void test::TestPlayground::OnUpdate(float deltaTime)
     {
+
     }
 
     void test::TestPlayground::OnRender()
@@ -399,9 +472,28 @@ namespace test {
         //Set cursor position
         glfwSetCursorPosCallback(m_Window, mousePositionCallback);
 
+        float blendSpeed = 0.05f;
 
-
-
+        if (soundSelect == 0)
+            blendProgress -= blendSpeed*deltaTime;
+        if (soundSelect == 1)
+            blendProgress += blendSpeed * deltaTime;
+        if (blendProgress > 1.0f)
+            blendProgress = 1.0f;
+        if (blendProgress < 0.0f)
+            blendProgress = 0.0f;
+        // Calculate the volume levels for each sound based on blendProgress
+        float sound1Volume = 100.0f * (1.0f - blendProgress);
+        float sound2Volume = 100.0f * blendProgress;
+        // Set the volume levels for the sounds
+        m_sound->setVolume(10);
+        m_sound2->setVolume(sound2Volume);
+        if (!(m_sound->getStatus() == sf::Sound::Playing)) {
+            m_sound->play();
+        }
+        if (!(m_sound2->getStatus() == sf::Sound::Playing)) {
+            m_sound2->play();
+        }
         GLCall(glClearColor(0.4f, 0.4f, 0.8f, 1.0f));
         GLCall(glEnable(GL_DEPTH_TEST));
         GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
@@ -560,16 +652,148 @@ namespace test {
         glUniform1f(glGetUniformLocation(m_Shader->GetID(), "LightSource[7].spotExponent"), m_Lumin[0].spotexponent);
         glUniform1i(glGetUniformLocation(m_Shader->GetID(), "LightSource[7].sw_light"), m_Lumin[0].encesa);
         
+        float sz = 2.0f;
 
-        //skybox
+
+
+        int screenWidth, screenHeight;
+        glfwGetFramebufferSize(m_Window, &screenWidth, &screenHeight);
+
+
+
+
+        //UpdateMC
+        int stateZ = glfwGetKey(m_Window, GLFW_KEY_W);
+        float moveValue = 4.0f;
+        if (stateZ == GLFW_PRESS)
+        {
+            if (m_MainChar.Move(0, deltaTime))
+                m_ViewTranslation.z = moveValue * deltaTime;
+            else
+            {
+                m_ViewTranslation.z = 0.0f;
+            }
+        }
+        else
+        {
+            stateZ = glfwGetKey(m_Window, GLFW_KEY_S);
+            if (stateZ == GLFW_PRESS)
+            {
+                if (m_MainChar.Move(2, deltaTime))
+                    m_ViewTranslation.z = -moveValue * deltaTime;
+                else
+                {
+                    m_ViewTranslation.z = 0.0f;
+                }
+
+            }
+            else
+            {
+                m_ViewTranslation.z = 0.0f;
+            }
+        }
+        int stateX = glfwGetKey(m_Window, GLFW_KEY_D);
+        if (stateX == GLFW_PRESS)
+        {
+            if (m_MainChar.Move(3, deltaTime))
+                m_ViewTranslation.x = -moveValue * deltaTime;
+            else
+            {
+                m_ViewTranslation.x = 0.0f;
+            }
+
+        }
+        else
+        {
+            stateX = glfwGetKey(m_Window, GLFW_KEY_A);
+            if (stateX == GLFW_PRESS)
+            {
+                if (m_MainChar.Move(1, deltaTime))
+                    m_ViewTranslation.x = moveValue * deltaTime;
+                else
+                {
+                    m_ViewTranslation.x = 0.0f;
+                }
+            }
+            else
+            {
+                m_ViewTranslation.x = 0.0f;
+            }
+        }
+        if (stateX != GLFW_PRESS && stateZ != GLFW_PRESS)
+        {
+            m_MainChar.m_LLM = m_MainChar.m_ModelMatrix;
+            m_MainChar.m_LRM = m_MainChar.m_ModelMatrix;
+        }
+        int state_ = glfwGetKey(m_Window, GLFW_KEY_SPACE);
+        if (state_ == GLFW_PRESS)
+        {
+            m_MainChar.Jump();
+        }
+        m_MainChar.UpdateStates(m_Board->m_BoardLayout, m_View, mousePosition, screenWidth, screenHeight, m_damage, deltaTime);
+        m_damage = 0;
+        m_Shader->SetUniformMat4f("modelMatrix", m_MainChar.m_ModelMatrix* m_MainChar.m_Rotation);
+        glm::mat4 normalMC = glm::mat4(1.0f);
+        normalMC = glm::transpose(glm::inverse(m_View * m_MainChar.m_ModelMatrix));
+        m_Shader->SetUniformMat4f("normalMatrix", normalMC);
+        m_View = glm::translate(m_View, m_ViewTranslation);
+        m_Shader->SetUniformMat4f("viewMatrix", m_View);
+        m_Shader->SetUniformMat4f("projectionMatrix", m_Proj); //
+        m_MainChar.DrawMCB(m_Shader->GetID());
+        if (m_MainChar.m_floored != true)
+        {
+            m_MainChar.m_LLM = m_MainChar.m_ModelMatrix;
+            m_MainChar.m_LRM = m_MainChar.m_ModelMatrix;
+        }
+        m_Shader->SetUniformMat4f("modelMatrix", m_MainChar.m_LRM * m_MainChar.m_Rotation);
+        m_MainChar.DrawMCLR(m_Shader->GetID());
+        m_Shader->SetUniformMat4f("modelMatrix", m_MainChar.m_LLM * m_MainChar.m_Rotation);
+        m_MainChar.DrawMCLL(m_Shader->GetID());
+
+        
+        //UpdateEnemies
+        unsigned int vecSize = m_EnemyVector.size();
+        if (vecSize > 3)
+            soundSelect = 1;
+        else
+            soundSelect = 2;
+        glm::mat4 model = glm::mat4(1.0f);
+        int removeTag = -1;
+        // run for loop from 0 to vecSize
+        for (unsigned int i = 0; i < vecSize; i++)
+        {
+            if (m_damage == 0)
+            {
+                m_damage = m_EnemyVector[i]->UpdateStates(m_Board->m_BoardLayout, m_MainChar.m_CenterPos, deltaTime, m_MainChar.m_attackRange);
+                if (m_damage == -1)
+                {
+                    removeTag = i;
+                }
+            }
+            else
+                m_EnemyVector[i]->UpdateStates(m_Board->m_BoardLayout, m_MainChar.m_CenterPos, deltaTime, m_MainChar.m_attackRange);
+            glm::mat4 normal = glm::transpose(glm::inverse(m_View * m_EnemyVector[i]->m_ModelMatrix));
+            m_Shader->SetUniformMat4f("normalMatrix", normal);
+            m_Shader->SetUniformMat4f("modelMatrix", m_EnemyVector[i]->m_ModelMatrix);
+            m_ObOBJ[12].draw_TriVAO_OBJ(m_Shader->GetID());
+        }
+        if (m_damage == -1)
+        {
+            m_EnemyVector.erase(m_EnemyVector.begin() + removeTag);
+            m_damage = 0;
+        }
+        m_MainChar.HealthDisplay(m_Shader);
 
         {
             float treatedTime = acumulatedTime - (int)acumulatedTime;
             int frameSelector = floor(treatedTime * 5);
+            int wave = frameSelector % 1;
+            if (frameSelector > 1)
+                wave = wave * -1;
             for (int i = 0; i < 25; i++)
                 for (int j = 0; j < 3; j++)
                 {
-                    glm::mat4 SKbox = glm::translate(glm::mat4(1.0f), glm::vec3(-20.0f + 20.0f * i, 0.6f, -20.0f + 20.0f * j));
+                    glm::mat4 SKbox = glm::translate(glm::mat4(1.0f), glm::vec3(-20.0f + 20.0f * i, 0.6f+wave*1.0f, -20.0f + 20.0f * j));
                     switch (frameSelector)
                     {
                     case 1:
@@ -619,105 +843,6 @@ namespace test {
                     }
                 }
         }
-
-
-        int stateZ = glfwGetKey(m_Window, GLFW_KEY_W);
-        float moveValue = 4.0f;
-        if (stateZ == GLFW_PRESS)
-        {
-            if (m_MainChar.Move(0, deltaTime))
-                m_ViewTranslation.z = moveValue * deltaTime;
-            else
-                m_ViewTranslation.z = 0.0f;
-        }
-        else
-        {
-            stateZ = glfwGetKey(m_Window, GLFW_KEY_S);
-            if (stateZ == GLFW_PRESS)
-            {
-                if (m_MainChar.Move(2, deltaTime))
-                    m_ViewTranslation.z = -moveValue * deltaTime;
-                else
-                    m_ViewTranslation.z = 0.0f;
-            }
-            else
-                m_ViewTranslation.z = 0.0f;
-        }
-        int stateX = glfwGetKey(m_Window, GLFW_KEY_D);
-        if (stateX == GLFW_PRESS)
-        {
-            if (m_MainChar.Move(3, deltaTime))
-                m_ViewTranslation.x = -moveValue * deltaTime;
-            else
-                m_ViewTranslation.x = 0.0f;
-        }
-        else
-        {
-            stateX = glfwGetKey(m_Window, GLFW_KEY_A);
-            if (stateX == GLFW_PRESS)
-            {
-                if (m_MainChar.Move(1, deltaTime))
-                    m_ViewTranslation.x = moveValue * deltaTime;
-                else
-                    m_ViewTranslation.x = 0.0f;
-            }
-            else
-                m_ViewTranslation.x = 0.0f;
-        }
-
-        int state_ = glfwGetKey(m_Window, GLFW_KEY_SPACE);
-        if (state_ == GLFW_PRESS)
-        {
-            m_MainChar.Jump();
-        }
-        
-
-
-        
-        float sz = 2.0f;
-
-
-
-        int screenWidth, screenHeight;
-        glfwGetFramebufferSize(m_Window, &screenWidth, &screenHeight);
-
-
-
-
-        //UpdateMC
-        
-        m_MainChar.UpdateStates(m_Board->m_BoardLayout, m_View, mousePosition, screenWidth, screenHeight, m_damage, deltaTime);
-        m_damage = 0;
-        m_MainChar.HealthDisplay(m_Shader);
-        m_Shader->SetUniformMat4f("modelMatrix", m_MainChar.m_ModelMatrix* m_MainChar.m_Rotation);
-        glm::mat4 normalMC = glm::mat4(1.0f);
-        normalMC = glm::transpose(glm::inverse(m_View * m_MainChar.m_ModelMatrix));
-        m_Shader->SetUniformMat4f("normalMatrix", normalMC);
-        m_View = glm::translate(m_View, m_ViewTranslation);
-        m_Shader->SetUniformMat4f("viewMatrix", m_View);
-        m_Shader->SetUniformMat4f("projectionMatrix", m_Proj); //
-        m_MainChar.DrawMCB(m_Shader->GetID());
-        m_MainChar.DrawMCLR(m_Shader->GetID());
-        m_MainChar.DrawMCLL(m_Shader->GetID());
-
-        
-        //UpdateEnemies
-        unsigned int vecSize = m_EnemyVector.size();
-        glm::mat4 model = glm::mat4(1.0f);
-        // run for loop from 0 to vecSize
-        for (unsigned int i = 0; i < vecSize; i++)
-        {
-            if (m_damage == 0)
-                m_damage = m_EnemyVector[i]->UpdateStates(m_Board->m_BoardLayout, m_MainChar.m_CenterPos);
-            else
-                m_EnemyVector[i]->UpdateStates(m_Board->m_BoardLayout, m_MainChar.m_CenterPos);
-            glm::mat4 normal = glm::transpose(glm::inverse(m_View * m_EnemyVector[i]->m_ModelMatrix));
-            m_Shader->SetUniformMat4f("normalMatrix", normal);
-            m_Shader->SetUniformMat4f("modelMatrix", m_EnemyVector[i]->m_ModelMatrix);
-            m_ObOBJ[12].draw_TriVAO_OBJ(m_Shader->GetID());
-        }
-
-
         int mapCenter = (int)m_MainChar.m_CenterPos.x - 13;
         if (mapCenter <= 0) {
             mapCenter = 0;
@@ -794,6 +919,10 @@ namespace test {
                         m_Shader->SetUniformMat4f("modelMatrix", modelU1);
                         m_ObOBJ[10].draw_TriVAO_OBJ(m_Shader->GetID());
                         break;
+                    case 8:
+                        m_Shader->SetUniformMat4f("modelMatrix", model);
+                        m_ObOBJ[9].draw_TriVAO_OBJ(m_Shader->GetID());
+                        break;
                     case 7:
                         m_Shader->SetUniformMat4f("modelMatrix", model);
                         //create enemy
@@ -803,6 +932,7 @@ namespace test {
                         m_Board->m_BoardLayout[x + z * 250 + y * 250 * 20] = 48+1;
                         m_ObOBJ[m_random[random]].draw_TriVAO_OBJ(m_Shader->GetID());
                         break;
+
                     }
                 }
             }
@@ -810,21 +940,39 @@ namespace test {
         glfwSetMouseButtonCallback(m_Window, mouseButtonCallback);
         if (mouseClick)
         {
+            if (timeStamp == -1.0f)
+                timeStamp = 0.0f;
 
-            m_MainChar.Attack(m_Shader, acumulatedTime);
-            glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_MainChar.m_CenterPos.x+0.2, m_MainChar.m_CenterPos.y+1, m_MainChar.m_CenterPos.z-0.2));
-            glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f,1.0f,1.0f));
-            glm::mat4 modelEffect = translationMatrix * scaleMatrix;
-            glm::mat4 normal = glm::transpose(glm::inverse(m_View * modelEffect));
-            m_Shader->SetUniformMat4f("normalMatrix", normal);
-            m_Shader->SetUniformMat4f("modelMatrix", modelEffect * m_MainChar.m_Rotation);
-            m_Effects[1].draw_TriVAO_OBJ(m_Shader->GetID());
         }
         else
         {
             m_Shader->SetUniformMat4f("modelMatrix", m_MainChar.m_ModelMatrix * m_MainChar.m_Rotation);
-            m_MainChar.DrawMCA(m_Shader->GetID());
+            if (timeStamp == -1.0f)
+                m_MainChar.DrawMCA(m_Shader->GetID());
         }
+        if (timeStamp >= 0.0f)
+        {
+            timeStamp += deltaTime;
+            glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
+            glm::mat4 auxArms = glm::rotate(glm::mat4(1.0f), -glm::radians(90.0f * (float)timeStamp * 12), rotationAxis);
+            m_Shader->SetUniformMat4f("modelMatrix", m_MainChar.m_ModelMatrix * m_MainChar.m_Rotation * auxArms);
+            m_MainChar.DrawMCA(m_Shader->GetID());
+            m_MainChar.Attack(m_Shader, acumulatedTime, m_Board->m_BoardLayout);
+            glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_MainChar.m_CenterPos.x + 0.2, m_MainChar.m_CenterPos.y + 1, m_MainChar.m_CenterPos.z - 0.2));
+            glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+            glm::mat4 modelEffect = translationMatrix * scaleMatrix;
+            glm::mat4 normal = glm::transpose(glm::inverse(m_View * modelEffect));
+            m_Shader->SetUniformMat4f("normalMatrix", normal);
+            m_Shader->SetUniformMat4f("modelMatrix", modelEffect* m_MainChar.m_Rotation);
+            m_Effects[1].draw_TriVAO_OBJ(m_Shader->GetID());
+
+            if (timeStamp >= 0.75f)
+                timeStamp = -1.0f;
+        }
+
+
+
+
         int stateE = glfwGetKey(m_Window, GLFW_KEY_E);
         if (stateE == GLFW_PRESS)
         {

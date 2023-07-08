@@ -9,19 +9,23 @@
 #include "entities/MC.h"
 #include "entities/Enemy1.h"
 
+
+#include <SFML/Audio.hpp>
 #include <memory>
 namespace test {
 
 	class TestPlayground : public Test
 	{
 	public:
-		TestPlayground(GLFWwindow* window);
+		TestPlayground(GLFWwindow* window, sf::Sound* sound, sf::Sound* sound2);
 		~TestPlayground();
 
 		void OnUpdate(float deltaTime) override;
 		void OnRender() override;
 		void OnImGuiRender() override;
 	private:
+		sf::Sound* m_sound;
+		sf::Sound* m_sound2;
 		int m_sizeSlide;
 		int m_random[100];
 		int m_ReadCheck = 0;

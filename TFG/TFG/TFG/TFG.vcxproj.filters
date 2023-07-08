@@ -513,6 +513,8 @@
     <None Include="res\Shaders\PerspectiveTest.shader" />
     <None Include="res\Shaders\Gouraud.shader" />
     <None Include="res\Shaders\Phong.shader" />
+    <None Include="res\Sound\Baseline.ogg" />
+    <None Include="res\Sound\BaselinePP.ogg" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Renderer.h">

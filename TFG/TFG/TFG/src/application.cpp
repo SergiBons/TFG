@@ -6,6 +6,8 @@
 #include<string>
 #include<sstream>
 
+
+
 #include"Renderer.h"
 #include"VertexBuffer.h"
 #include"VertexBufferLayout.h"
@@ -24,7 +26,7 @@
 #include"tests/TestPerspectiva.h"
 #include"tests/Test3D.h"
 #include"tests/TestMultiobject.h"
-//#include"tests/TestPhong.h"
+
 #include"tests/TestPlayground.h"
 #include"tests/TestMultiDrawCalls.h"
 #include"tests/TestCamera.h"
@@ -32,17 +34,15 @@
 #include"tests/TestBoard.h"
 #include"tests/TestImported.h"
 
-
 int main(void)
 {
-    
     GLFWwindow* window;
     /* Initialize the library */
     if (!glfwInit())
         return -1;
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(1920, 1080, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(1920, 1080, "Orenaut", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -62,6 +62,17 @@ int main(void)
     {
        
 
+        sf::SoundBuffer buffer;
+        if (!buffer.loadFromFile("C:/Users/sbons/OneDrive/Documentos/GitHub/TFG/TFG/TFG/TFG/res/Sound/Baseline.wav")) {
+            // Error handling if sound file fails to load
+        }
+        sf::Sound* so = new sf::Sound(buffer);
+
+        sf::SoundBuffer buffer1;
+        if (!buffer1.loadFromFile("C:/Users/sbons/OneDrive/Documentos/GitHub/TFG/TFG/TFG/TFG/res/Sound/BaselinePP.wav")) {
+            // Error handling if sound file fails to load
+        }
+        sf::Sound* so2 = new sf::Sound(buffer1);
         ImGui::CreateContext();
         ImGui_ImplGlfwGL3_Init(window, true);
         ImGui::StyleColorsDark();
@@ -71,7 +82,7 @@ int main(void)
         test::Test* currentTest = nullptr;
         test::TestMenu* testMenu = new test::TestMenu(currentTest);
         test::TestCamera* testCamera = new test::TestCamera(window);
-        test::TestPlayground* testPlayground = new test::TestPlayground(window);
+        test::TestPlayground* testPlayground = new test::TestPlayground(window, so, so2);
 
 
         currentTest = testMenu;
